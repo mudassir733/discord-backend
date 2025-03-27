@@ -1,6 +1,6 @@
 // src/entities/User.ts
 export class User {
-    private id?: number;
+    private id: string;
     private email: string;
     private phoneNumber?: string;
     private displayName: string;
@@ -9,13 +9,13 @@ export class User {
     private dateOfBirth: Date;
 
     constructor(
+        id: string,
         email: string,
         displayName: string,
         username: string,
         password: string,
         dateOfBirth: Date,
         phoneNumber?: string,
-        id?: number
     ) {
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -27,7 +27,7 @@ export class User {
     }
 
     // Getters
-    getId(): number | undefined { return this.id; }
+    getId(): string | undefined { return this.id; }
     getEmail(): string { return this.email; }
     getPhoneNumber(): string | undefined { return this.phoneNumber; }
     getDisplayName(): string { return this.displayName; }
@@ -36,5 +36,5 @@ export class User {
     getDateOfBirth(): Date { return this.dateOfBirth; }
 
     // Setter for ID (set by repository after saving)
-    setId(id: number): void { this.id = id; }
+    setId(id: string): void { this.id = id; }
 }

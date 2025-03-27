@@ -3,10 +3,13 @@ import { User } from "../../entities/user.js";
 import { prisma } from "../../config/database.js";
 
 
+
+
 export class UserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
         const createdUser = await prisma.user.create({
             data: {
+                id: user.getId(),
                 email: user.getEmail(),
                 phoneNumber: user.getPhoneNumber(),
                 displayName: user.getDisplayName(),
@@ -16,13 +19,13 @@ export class UserRepository implements IUserRepository {
             }
         })
         const newUser = new User(
+            createdUser.id,
             createdUser.email,
             createdUser.displayName,
             createdUser.userName || '',
             createdUser.password,
             createdUser.dateOfBirth,
             createdUser.phoneNumber || '',
-            createdUser.id
         )
         return newUser
     }
@@ -31,26 +34,26 @@ export class UserRepository implements IUserRepository {
         const user = await prisma.user.findUnique({ where: { email } })
         if (!user) return null
         return new User(
+            user.id,
             user.email,
             user.displayName,
             user.userName || '',
             user.password,
             user.dateOfBirth,
             user.phoneNumber || '',
-            user.id
         )
     }
     async findByPhoneNumber(phoneNumber: string): Promise<User | null> {
         const user = await prisma.user.findUnique({ where: { phoneNumber } })
         if (!user) return null
         return new User(
+            user.id,
             user.email,
             user.displayName,
             user.userName || '',
             user.password,
             user.dateOfBirth,
             user.phoneNumber || '',
-            user.id
         )
 
     }
@@ -58,13 +61,13 @@ export class UserRepository implements IUserRepository {
         const user = await prisma.user.findUnique({ where: { userName } })
         if (!user) return null
         return new User(
+            user.id,
             user.email,
             user.displayName,
             user.userName || '',
             user.password,
             user.dateOfBirth,
             user.phoneNumber || '',
-            user.id
         )
 
     }
@@ -76,13 +79,13 @@ export class UserRepository implements IUserRepository {
         });
         if (!user) return null;
         return new User(
+            user.id,
             user.email,
             user.displayName,
             user.userName || '',
             user.password,
             user.dateOfBirth,
             user.phoneNumber || '',
-            user.id
         );
     }
 

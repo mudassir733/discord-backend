@@ -7,9 +7,11 @@ import dotenv from "dotenv";
 
 
 dotenv.config();
+console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
 const PORT = process.env.PORT || 6000;
 const app = express();
 app.use(express.json());
+
 
 const userRepository = new UserRepository()
 const userController = new UserController(userRepository)
