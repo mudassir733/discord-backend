@@ -4,12 +4,21 @@ import { UserRepository } from "./interface-adapters/repositories/userRepository
 import { UserController } from "./interface-adapters/controllers/userController.js"
 import { UserRoute } from "./interface-adapters/routes/userRoute.js"
 import dotenv from "dotenv";
+import cors from "cors"
+
+
 
 
 dotenv.config();
-console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 8000;
 const app = express();
+
+
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 app.use(express.json());
 
 

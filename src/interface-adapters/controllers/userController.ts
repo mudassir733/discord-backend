@@ -19,8 +19,6 @@ export class UserController {
         this.loginUser = new LoginUser(userRepository);
     }
 
-
-
     async register(req: Request, res: Response): Promise<void> {
         try {
             const input: RegisterUserInput = req.body;
@@ -33,6 +31,7 @@ export class UserController {
                 dateOfBirth: user.getDateOfBirth(),
                 phoneNumber: user.getPhoneNumber(),
                 access_token: token,
+                message: "Account register successfully",
             });
         } catch (error: any) {
             if (error instanceof ZodError) {
