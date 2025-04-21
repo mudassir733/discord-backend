@@ -5,6 +5,8 @@ import { UserController } from "./interface-adapters/controllers/userController.
 import { UserRoute } from "./interface-adapters/routes/userRoute.js"
 import dotenv from "dotenv";
 import cors from "cors"
+import { ResetPasswordController } from "./interface-adapters/controllers/resetPasswordController.js";
+import { ResetPasswordRoutes } from "./interface-adapters/routes/resetPasswordRoute.js";
 
 
 
@@ -25,8 +27,11 @@ app.use(express.json());
 const userRepository = new UserRepository()
 const userController = new UserController(userRepository)
 const userRoutes = new UserRoute(userController)
+const resetPasswordController = new ResetPasswordController(userRepository);
+const resetPasswordRoutes = new ResetPasswordRoutes(resetPasswordController);
 
 app.use("/users", userRoutes.getRouter())
+app.use('/password', resetPasswordRoutes.getRouter());
 
 
 // start server 

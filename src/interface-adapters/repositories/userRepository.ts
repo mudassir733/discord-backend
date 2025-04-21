@@ -30,6 +30,8 @@ export class UserRepository implements IUserRepository {
         return newUser
     }
 
+
+
     async findByEmail(email: string): Promise<User | null> {
         const user = await prisma.user.findUnique({ where: { email } })
         if (!user) return null
@@ -87,6 +89,30 @@ export class UserRepository implements IUserRepository {
             user.dateOfBirth,
             user.phoneNumber || '',
         );
+    }
+
+
+    async findById(id: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({ where: { id } });
+        console.log('Finding user by ID:', id);
+        if (!user) return null;
+        return new User(
+            user.id,
+            user.email,
+            user.displayName,
+            user.userName || '',
+            user.password,
+            user.dateOfBirth,
+            user.phoneNumber || ''
+        );
+    }
+
+
+    async updatePassword(userId: string, hashedPassword: string): Promise<void> {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { password: hashedPassword },
+        });
     }
 
 
