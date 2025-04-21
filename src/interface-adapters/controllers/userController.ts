@@ -55,6 +55,7 @@ export class UserController {
                 dateOfBirth: user.getDateOfBirth(),
                 phoneNumber: user.getPhoneNumber(),
                 access_token: token,
+                message: "User login successfully"
             });
         } catch (error: any) {
             if (error instanceof ZodError) {

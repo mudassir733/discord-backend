@@ -67,6 +67,7 @@ export class RegisterUser {
         const saveUser = await this.userRepository.save(user)
         const payload = {
             sub: saveUser.getId(),
+            id: saveUser.getId(),
             email: saveUser.getEmail(),
             userName: saveUser.getUsername(),
             displayName: saveUser.getDisplayName(),

@@ -32,6 +32,7 @@ export class LoginUser {
 
         const payload = {
             sub: user.getId(),
+            id: user.getId(),
             email: user.getEmail(),
             username: user.getUsername(),
             displayName: user.getDisplayName()
