@@ -5,15 +5,15 @@ import { sendPasswordResetEmail } from "../utils/emailService.js";
 
 
 export interface InitiatePasswordResetInput {
-    userId: string
+    email: string
 }
 
 export class InitiatePasswordResetForLoggedInUser {
     constructor(private userRepository: IUserRepository) { }
 
     async execute(input: InitiatePasswordResetInput): Promise<void> {
-        console.log('Initiate reset for userId:', input.userId);
-        const user = await this.userRepository.findById(input.userId)
+        console.log('Initiate reset for Email:', input.email);
+        const user = await this.userRepository.findByEmail(input.email)
 
         if (!user) throw new Error("User not found!")
 

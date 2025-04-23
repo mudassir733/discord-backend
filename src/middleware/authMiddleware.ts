@@ -7,7 +7,7 @@ export interface AuthenticatedRequest extends Request {
 
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     const authHeader = req.headers.authorization;
-    console.log('Auth header:', authHeader); // Debug log
+    console.log('Auth header:', authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         res.status(401).json({ error: 'No token provided or invalid format' });
@@ -15,13 +15,13 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
     }
 
     const token = authHeader.split(' ')[1];
-    console.log('Token:', token); // Debug log
+    console.log('Token:', token);
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as {
             email: string; id: string
         };
-        console.log('Decoded token:', decoded); // Debug log
+        console.log('Decoded token:', decoded);
         if (!decoded.id) {
             res.status(401).json({ error: 'Token missing id field' });
             return;
@@ -29,7 +29,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
         req.user = { id: decoded.id, email: decoded.email };
         next();
     } catch (error) {
-        console.error('Token verification error:', error); // Debug log
+        console.error('Token verification error:', error);
         res.status(401).json({ error: 'Invalid or expired token' });
         return;
     }
