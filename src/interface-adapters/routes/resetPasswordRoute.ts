@@ -1,6 +1,5 @@
 import express, { Router } from 'express';
 import { ResetPasswordController } from '../controllers/resetPasswordController.js';
-import { authMiddleware } from '../../middleware/authMiddleware.js';
 
 export class ResetPasswordRoutes {
     private router: Router = express.Router();
@@ -11,10 +10,11 @@ export class ResetPasswordRoutes {
         this.initRoutes();
     }
 
+
     private initRoutes(): void {
-        this.router.post('/initiate-reset', authMiddleware, (req, res) => this.controller.initiateResetPassword(req, res));
-        this.router.post('/verify-token', (req, res) => this.controller.verifyResetToken(req, res));
-        this.router.post('/reset-password', (req, res) => this.controller.resetPasswords(req, res));
+        this.router.post('/initiate-reset', this.controller.initiateResetPassword.bind(this.controller));
+        this.router.post('/verify-token', this.controller.verifyResetToken.bind(this.controller));
+        this.router.post('/reset-password', this.controller.resetPasswords.bind(this.controller));
     }
 
     getRouter(): Router {

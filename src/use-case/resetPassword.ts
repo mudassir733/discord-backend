@@ -4,12 +4,12 @@ import * as bcrypt from 'bcrypt';
 import { z } from 'zod';
 
 const resetPasswordSchema = z.object({
-    newPassword: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+    password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
 });
 
 export interface ResetPasswordInput {
     userId: string;
-    newPassword: string;
+    password: string;
 }
 
 export class ResetPassword {
@@ -17,7 +17,7 @@ export class ResetPassword {
 
     async execute(input: ResetPasswordInput): Promise<void> {
         const validatedInput = resetPasswordSchema.parse(input);
-        const hashedPassword = await bcrypt.hash(validatedInput.newPassword, 10);
+        const hashedPassword = await bcrypt.hash(validatedInput.password, 10);
         await this.userRepository.updatePassword(input.userId, hashedPassword);
 
         // Invalidate all reset tokens for this user

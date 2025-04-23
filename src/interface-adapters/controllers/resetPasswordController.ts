@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { InitiatePasswordResetForLoggedInUser, InitiatePasswordResetInput } from '../../use-case/initiatePasswordResetForLoggedInUser.js';
+import { InitiatePasswordResetForLoggedInUser } from '../../use-case/initiatePasswordResetForLoggedInUser.js';
 import { VerifyResetToken, VerifyResetTokenInput } from '../../use-case/verifyToken.js';
 import { ResetPassword, ResetPasswordInput } from '../../use-case/resetPassword.js';
 import { IUserRepository } from '../../use-case/IUserRepository.js';
-import { AuthenticatedRequest } from '../../middleware/authMiddleware.js';
 import { ZodError } from 'zod';
 
 export class ResetPasswordController {
@@ -17,13 +16,13 @@ export class ResetPasswordController {
         this.resetPassword = new ResetPassword(userRepository);
     }
 
-    async initiateResetPassword(req: AuthenticatedRequest, res: Response): Promise<void> {
+    async initiateResetPassword(req: Request, res: Response): Promise<void> {
         try {
-            const userEmail = req.user?.email
-            const userId = req.user!.id;
-            console.log('Controller userId:', userId)
-            await this.initiateReset.execute({ userId });
-            res.status(200).json({ message: `To reset your password we have sent an email at ${userEmail} please check your email` });
+            const { email } = req.body
+            console.log('Controller userId:', email)
+            if (!email) throw new Error("Email is required for reset your password")
+            await this.initiateReset.execute({ email })
+            res.status(200).json({ message: `To reset your password we have sent an email at ${email} please check your email` });
         } catch (error: any) {
             console.error('Initiate reset error:', error);
             res.status(400).json({ error: error.message });
