@@ -14,6 +14,8 @@ export class UserRoute {
     private initRoutes(): void {
         this.router.post('/register', (req, res) => this.controller.register(req, res));
         this.router.post('/login', (req, res) => this.controller.login(req, res));
+        this.router.get('/me/:id', (req, res) => this.controller.getUserById(req, res));
+        this.router.get('/me', (req, res) => this.controller.getAllUser(req, res))
     }
     getRouter(): Router {
         return this.router;
