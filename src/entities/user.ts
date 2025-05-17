@@ -34,7 +34,17 @@ export class User {
     getUsername(): string { return this.username; }
     getPassword(): string { return this.password; }
     getDateOfBirth(): Date { return this.dateOfBirth; }
-
     // Setter for ID (set by repository after saving)
     setId(id: string): void { this.id = id; }
+
+    toJSON(): object {
+        return {
+            id: this.id,
+            email: this.email,
+            displayName: this.displayName,
+            username: this.username,
+            dateOfBirth: this.dateOfBirth,
+            phoneNumber: this.phoneNumber,
+        };
+    }
 }
