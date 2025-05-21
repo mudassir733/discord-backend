@@ -31,6 +31,7 @@ model User {
     receivedRequests   FriendRequest[]      @relation("Receiver")
     friendships1       Friendship[]         @relation("User1")
     friendships2       Friendship[]         @relation("User2")
+    notifications      Notification[]       @relation("Recipient")
 }
 
 model FriendRequest {
@@ -58,4 +59,18 @@ model Friendship {
 
     @@unique([user1Id, user2Id])
     @@index([user1Id, user2Id])
+}
+
+model Notification {
+    id          String   @id @default(uuid())
+    recipientId String
+    type        String
+    message     String
+    createdAt   DateTime @default(now())
+    read        Boolean  @default(false)
+
+    recipient User @relation("Recipient", fields: [recipientId], references: [id])
+
+    @@index([recipientId])
+    @@index([createdAt])
 }

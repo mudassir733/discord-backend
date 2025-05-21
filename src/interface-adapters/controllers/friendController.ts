@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { SendFriendRequestUseCase } from '../../use-case/SendFriendRequest.js';
 import { AcceptFriendRequestUseCase } from '../../use-case/acceptFriendRequest.js';
 import { GetFriendsUseCase } from '../../use-case/getFriends.js';
+import { RejectFriendRequestUseCase } from '../../use-case/rejectFriendRequest.js';
 import { SearchUsersUseCase } from '../../use-case/searchUsers.js';
 
 interface AuthenticatedRequest extends Request {
@@ -12,6 +13,7 @@ export class FriendController {
     constructor(
         private sendFriendRequestUseCase: SendFriendRequestUseCase,
         private acceptFriendRequestUseCase: AcceptFriendRequestUseCase,
+        private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
         private getFriendsUseCase: GetFriendsUseCase,
         private searchUsersUseCase: SearchUsersUseCase
     ) { }
@@ -20,20 +22,12 @@ export class FriendController {
     async sendFriendRequest(req: AuthenticatedRequest, res: Response): Promise<void> {
         const senderId = req.user?.id;
         const { receiverUsername } = req.body;
-        console.log("rec, name", receiverUsername)
-        console.log("Req body", req.body)
-
-
         if (!receiverUsername) {
             res.status(400).json({ error: 'Receiver username is required' });
             return;
-
-
         }
-
         try {
             const friendRequest = await this.sendFriendRequestUseCase.execute(senderId!, receiverUsername);
-            console.log("FRND----", friendRequest)
             res.status(201).json(friendRequest);
         } catch (error: any) {
             res.status(400).json({ error: error.message });
@@ -51,6 +45,18 @@ export class FriendController {
         }
     }
 
+    async rejectFriendRequest(req: AuthenticatedRequest, res: Response): Promise<void> {
+        const { id } = req.params;
+        const userId = req.user?.id;
+        try {
+            if (!userId) throw new Error("User not found")
+            await this.rejectFriendRequestUseCase.execute(id, userId);
+            res.status(200).json({ message: 'Friend request rejected' });
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+
+        }
+    }
 
 
     async getFriends(req: AuthenticatedRequest, res: Response): Promise<void> {
