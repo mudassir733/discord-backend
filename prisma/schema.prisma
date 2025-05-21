@@ -27,4 +27,50 @@ model User {
     createdAt          DateTime             @default(now())
     updatedAt          DateTime             @updatedAt
     PasswordResetToken PasswordResetToken[]
+    sentRequests       FriendRequest[]      @relation("Sender")
+    receivedRequests   FriendRequest[]      @relation("Receiver")
+    friendships1       Friendship[]         @relation("User1")
+    friendships2       Friendship[]         @relation("User2")
+    notifications      Notification[]       @relation("Recipient")
+}
+
+model FriendRequest {
+    id         String   @id @default(uuid())
+    senderId   String
+    receiverId String
+    status     String   @default("pending")
+    createdAt  DateTime @default(now())
+    sender     User     @relation("Sender", fields: [senderId], references: [id])
+    receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+
+    @@index([senderId]) // Index for queries on sent requests
+    @@index([receiverId]) // Index for queries on received requests
+    @@index([senderId, receiverId]) // Composite index for queries involving both
+    @@index([createdAt])
+}
+
+model Friendship {
+    id        String   @id @default(uuid())
+    user1Id   String
+    user2Id   String
+    createdAt DateTime @default(now())
+    user1     User     @relation("User1", fields: [user1Id], references: [id])
+    user2     User     @relation("User2", fields: [user2Id], references: [id])
+
+    @@unique([user1Id, user2Id])
+    @@index([user1Id, user2Id])
+}
+
+model Notification {
+    id          String   @id @default(uuid())
+    recipientId String
+    type        String
+    message     String
+    createdAt   DateTime @default(now())
+    read        Boolean  @default(false)
+
+    recipient User @relation("Recipient", fields: [recipientId], references: [id])
+
+    @@index([recipientId])
+    @@index([createdAt])
 }

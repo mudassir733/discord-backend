@@ -30,6 +30,31 @@ export class UserRepository implements IUserRepository {
         return newUser
     }
 
+    async searchByUsername(query: string, excludeUserId: string): Promise<User[]> {
+        const users = await prisma.user.findMany({
+            where: {
+                userName: {
+                    contains: query,
+                    mode: 'insensitive'
+                },
+                NOT: {
+                    id: excludeUserId
+                }
+            }
+        });
+
+        return users.map(user => new User(
+            user.id,
+            user.userName || '',
+            user.email,
+            user.phoneNumber || '',
+            user.password,
+            user.createdAt
+        ));
+
+
+    }
+
 
 
     async findByEmail(email: string): Promise<User | null> {

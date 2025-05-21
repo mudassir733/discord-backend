@@ -11,5 +11,6 @@ export interface IUserRepository {
     updatePassword(userId: string, hashPassword: string): Promise<void>;
     updatePasswordByEmail(email: string, hashedPassword: string): Promise<void>;
     findAll(): Promise<User[]>;
+    searchByUsername(query: string, excludeUserId: string): Promise<User[]>;
 
 }
