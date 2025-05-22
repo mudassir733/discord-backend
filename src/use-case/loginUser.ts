@@ -1,4 +1,6 @@
 import { IUserRepository } from "./IUserRepository.js";
+import { IdleScheduler } from "../utils/idleSchedular.js";
+import { NotificationController } from "../interface-adapters/controllers/notificationController.js";
 import { User } from "../entities/user.js";
 import * as bcrypt from "bcrypt";
 import { z } from "zod";
@@ -17,7 +19,10 @@ export interface LoginUserInput {
 
 
 export class LoginUser {
-    constructor(private userRepository: IUserRepository) { }
+    constructor(
+        private userRepository: IUserRepository,
+        private notificationController: NotificationController
+    ) { }
     async execute(input: LoginUserInput): Promise<{ user: User, token: string }> {
 
         const validateInput = loginSchema.parse(input);
@@ -26,8 +31,22 @@ export class LoginUser {
         const user = await this.userRepository.findByEmailOrPhoneNumber(validateInput.identifier)
         if (!user) throw new Error("Couldn't find user with this email or phone number")
 
+
         const comparePassword = await bcrypt.compare(validateInput.password, user.getPassword());
         if (!comparePassword) throw new Error("Incorrect password");
+
+        await this.userRepository.updateUserStatus(user.getId()!, 'online')
+        await this.notificationController.broadcastStatusUpdate(user.getId()!, 'online')
+        user.setStatus('online')
+
+        // scheduling for idle status
+        const schedular = new IdleScheduler(async (userId) => {
+            await this.userRepository.updateUserStatus(userId, 'idle')
+            user.setStatus('idle')
+        },
+            this.notificationController
+        )
+        schedular.schedule(user.getId()!)
 
 
         const payload = {

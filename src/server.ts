@@ -35,6 +35,9 @@ import { FriendRoutes } from './interface-adapters/routes/friendRoute.js';
 import { ChannelRoutes } from "./interface-adapters/routes/channelRoute.js";
 
 
+// utils
+import { IdleScheduler } from "./utils/idleSchedular.js";
+
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -66,7 +69,15 @@ const notificationRepository = new NotificationRepository();
 const discordRepository = new DiscordRepository();
 
 // 2. Socket Controllers
-const notificationController = new NotificationController(io);
+const notificationController = new NotificationController(io, friendshipRepository);
+
+// Idle Scheduler
+const idleScheduler = new IdleScheduler(
+    async (userId) => {
+        await userRepository.updateUserStatus(userId, 'idle');
+    },
+    notificationController
+);
 
 // 3. Use Cases
 const sendFriendRequestUseCase = new SendFriendRequestUseCase(
@@ -100,7 +111,7 @@ const searchUsersUseCase = new SearchUsersUseCase(userRepository);
 const createChannel = new CreateChannel(discordRepository);
 
 // 4. Controllers
-const userController = new UserController(userRepository);
+const userController = new UserController(userRepository, notificationController, idleScheduler);
 const resetPasswordController = new ResetPasswordController(userRepository);
 const friendController = new FriendController(
     sendFriendRequestUseCase,

@@ -26,6 +26,9 @@ model User {
     dateOfBirth        DateTime
     createdAt          DateTime             @default(now())
     updatedAt          DateTime             @updatedAt
+    status             String?              @default("offline")
+    lastActive         DateTime?            @default(now())
+    profilePicture     String?              @default("default.png")
     PasswordResetToken PasswordResetToken[]
     sentRequests       FriendRequest[]      @relation("Sender")
     receivedRequests   FriendRequest[]      @relation("Receiver")

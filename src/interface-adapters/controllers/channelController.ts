@@ -12,7 +12,7 @@ export class ChannelController {
                 return;
             }
             await this.createChannelUseCase.execute(guildId, channelName);
-            res.status(200).json({ message: `Channel "${channelName}" created in guild ${guildId}` });
+            res.status(201).json({ message: `Channel "${channelName}" created in guild ${guildId}` });
         } catch (error: any) {
             console.error('Create channel error:', error);
             res.status(500).json({ error: error.message || 'Failed to create channel' });

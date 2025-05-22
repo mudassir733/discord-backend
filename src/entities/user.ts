@@ -7,6 +7,8 @@ export class User {
     private username: string;
     private password: string;
     private dateOfBirth: Date;
+    private status: 'offline' | 'online' | 'idle' = 'offline';
+    private lastActive: Date;
 
     constructor(
         id: string,
@@ -16,6 +18,8 @@ export class User {
         password: string,
         dateOfBirth: Date,
         phoneNumber?: string,
+        status: 'offline' | 'online' | 'idle' = 'offline',
+        lastActive: Date = new Date()
     ) {
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -24,6 +28,8 @@ export class User {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.id = id;
+        this.status = status;
+        this.lastActive = lastActive;
     }
 
     // Getters
@@ -34,8 +40,11 @@ export class User {
     getUsername(): string { return this.username; }
     getPassword(): string { return this.password; }
     getDateOfBirth(): Date { return this.dateOfBirth; }
+    getStatus(): 'offline' | 'online' | 'idle' { return this.status; }
     // Setter for ID (set by repository after saving)
     setId(id: string): void { this.id = id; }
+    // Setter for status
+    setStatus(status: 'offline' | 'online' | 'idle'): void { this.status = status; }
 
     toJSON(): object {
         return {
@@ -45,6 +54,8 @@ export class User {
             username: this.username,
             dateOfBirth: this.dateOfBirth,
             phoneNumber: this.phoneNumber,
+            status: this.status,
+            lastActive: this.lastActive,
         };
     }
 }

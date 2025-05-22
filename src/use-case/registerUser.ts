@@ -22,6 +22,7 @@ export interface RegisterUserInput {
     phoneNumber?: string;
     password: string;
     dateOfBirth: string;
+    status: string;
 }
 
 
@@ -47,10 +48,12 @@ export class RegisterUser {
             if (existingPhoneNumber) throw new Error("User with this phone number already exists");
 
         }
+
         //hash password
         const hashedPassword = await bcrypt.hash(validatedInput.password, 10);
 
         const uuid = uuidv4();
+
 
         // create new User
         const user = new User(
@@ -60,7 +63,8 @@ export class RegisterUser {
             validatedInput.userName,
             hashedPassword,
             new Date(validatedInput.dateOfBirth),
-            validatedInput.phoneNumber
+            validatedInput.phoneNumber,
+            input.status as 'offline' | 'online' | 'idle'
         );
 
         // save user

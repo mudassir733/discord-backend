@@ -10,6 +10,7 @@ export interface IUserRepository {
     findById(id: string): Promise<User | null>;
     updatePassword(userId: string, hashPassword: string): Promise<void>;
     updatePasswordByEmail(email: string, hashedPassword: string): Promise<void>;
+    updateUserStatus(userId: string, status: string): Promise<void>;
     findAll(): Promise<User[]>;
     searchByUsername(query: string, excludeUserId: string): Promise<User[]>;
 

@@ -15,7 +15,8 @@ export class UserRepository implements IUserRepository {
                 displayName: user.getDisplayName(),
                 userName: user.getUsername(),
                 password: user.getPassword(),
-                dateOfBirth: user.getDateOfBirth()
+                dateOfBirth: user.getDateOfBirth(),
+                status: user.getStatus(),
             }
         })
         const newUser = new User(
@@ -26,6 +27,7 @@ export class UserRepository implements IUserRepository {
             createdUser.password,
             createdUser.dateOfBirth,
             createdUser.phoneNumber || '',
+            createdUser.status as 'offline' | 'online' | 'idle',
         )
         return newUser
     }
@@ -119,7 +121,6 @@ export class UserRepository implements IUserRepository {
 
     async findById(id: string): Promise<User | null> {
         const user = await prisma.user.findUnique({ where: { id } });
-        console.log('Finding user by ID:', id);
         if (!user) return null;
         return new User(
             user.id,
@@ -128,8 +129,22 @@ export class UserRepository implements IUserRepository {
             '',
             user.userName || '',
             user.dateOfBirth,
-            user.phoneNumber || ''
+            user.phoneNumber || '',
+            user.status as 'offline' | 'online' | 'idle',
+            user.lastActive = new Date()
         );
+    }
+
+    async updateUserStatus(userId: string, status: string): Promise<void> {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                status,
+                lastActive: new Date()
+            },
+        });
+        if (!user) throw new Error('User not found');
+
     }
 
 
@@ -142,7 +157,10 @@ export class UserRepository implements IUserRepository {
             user.userName || '',
             '',
             user.dateOfBirth,
-            user.phoneNumber || ''
+            user.phoneNumber || '',
+            user.status as 'offline' | 'online' | 'idle',
+            user.lastActive = new Date()
+
         ))
     }
 
