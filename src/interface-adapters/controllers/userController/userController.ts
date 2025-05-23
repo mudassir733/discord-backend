@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { RegisterUser, RegisterUserInput } from "../../use-case/registerUser.js";
-import { LoginUser, LoginUserInput } from "../../use-case/loginUser.js";
-import { LogoutUser } from "../../use-case/logoutUser.js";
-import { IUserRepository } from "../../use-case/IUserRepository.js";
-import { GetAllUsersUseCase } from "../../use-case/getAllUser.js";
+import { RegisterUser, RegisterUserInput } from "../../../use-case/userUseCase/registerUser.js";
+import { LoginUser, LoginUserInput } from "../../../use-case/userUseCase/loginUser.js";
+import { LogoutUser } from "../../../use-case/userUseCase/logoutUser.js";
+import { IUserRepository } from "../../../interfaces/IUserRepository.js";
+import { GetAllUsersUseCase } from "../../../use-case/userUseCase/getAllUser.js";
 import { NotificationController } from "./notificationController.js";
-import { GetUserById } from "../../use-case/getUserById.js";
+import { GetUserById } from "../../../use-case/userUseCase/getUserById.js";
 import { ZodError } from "zod";
-import { AuthenticatedRequest } from "../../middleware/authMiddleware.js";
-import { IdleScheduler } from "../../utils/idleSchedular.js";
+import { AuthenticatedRequest } from "../../../middleware/authMiddleware.js";
+import { IdleScheduler } from "../../../utils/idleSchedular.js";
 
 export interface UserController {
     register(req: Request, res: Response): Promise<void>;

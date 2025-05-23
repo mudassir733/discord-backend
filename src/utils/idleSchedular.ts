@@ -1,5 +1,5 @@
 import schedule, { Job } from 'node-schedule';
-import { NotificationController } from '../interface-adapters/controllers/notificationController.js';
+import { NotificationController } from '../interface-adapters/controllers/userController/notificationController.js';
 
 export class IdleScheduler {
     private idleJobs: Map<string, Job> = new Map();

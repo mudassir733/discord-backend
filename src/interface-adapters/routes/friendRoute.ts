@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FriendController } from '../controllers/friendController.js';
+import { FriendController } from '../controllers/userController/friendController.js';
 import { authMiddleware } from '../../middleware/authMiddleware.js';
 
 export class FriendRoutes {

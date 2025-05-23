@@ -1,6 +1,6 @@
-import { IUserRepository } from './IUserRepository.js';
-import { IdleScheduler } from '../utils/idleSchedular.js';
-import { NotificationController } from '../interface-adapters/controllers/notificationController.js';
+import { IUserRepository } from '../../interfaces/IUserRepository.js';
+import { IdleScheduler } from '../../utils/idleSchedular.js';
+import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 
 export class LogoutUser {
     constructor(

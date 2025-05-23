@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../use-case/IUserRepository.js";
+import { IUserRepository } from "../../interfaces/IUserRepository.js";
 import { User } from "../../entities/user.js";
 import { prisma } from "../../config/database.js";
 

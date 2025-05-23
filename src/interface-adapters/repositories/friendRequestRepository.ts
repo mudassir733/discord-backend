@@ -1,4 +1,4 @@
-import { IFriendRequestRepository } from '../../use-case/IFriendRequestRepository.js';
+import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
 import { FriendRequest } from '../../entities/friendRequest.js';
 import { prisma } from '../../config/database.js';
 

@@ -1,5 +1,5 @@
-import { User } from "../entities/user.js";
-import { IUserRepository } from "./IUserRepository.js";
+import { User } from "../../entities/user.js";
+import { IUserRepository } from "../../interfaces/IUserRepository.js";
 import * as bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"

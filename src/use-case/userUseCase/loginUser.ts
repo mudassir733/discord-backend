@@ -1,7 +1,7 @@
-import { IUserRepository } from "./IUserRepository.js";
-import { IdleScheduler } from "../utils/idleSchedular.js";
-import { NotificationController } from "../interface-adapters/controllers/notificationController.js";
-import { User } from "../entities/user.js";
+import { IUserRepository } from "../../interfaces/IUserRepository.js";
+import { IdleScheduler } from "../../utils/idleSchedular.js";
+import { NotificationController } from "../../interface-adapters/controllers/userController/notificationController.js";
+import { User } from "../../entities/user.js";
 import * as bcrypt from "bcrypt";
 import { z } from "zod";
 import jwt from "jsonwebtoken";

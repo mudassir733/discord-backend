@@ -1,6 +1,6 @@
 import { Socket, Server } from "socket.io";
-import { Notification } from "../../entities/notifications.js";
-import { IFriendshipRepository } from "../../use-case/IFriendshipRepository.js";
+import { Notification } from "../../../entities/notifications.js";
+import { IFriendshipRepository } from "../../../interfaces/IFriendshipRepository.js";
 
 export class NotificationController {
     private io: Server;

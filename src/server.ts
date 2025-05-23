@@ -14,19 +14,19 @@ import { DiscordRepository } from "./interface-adapters/repositories/disordRepos
 import { NotificationRepository } from "./interface-adapters/repositories/notificationRepository.js";
 
 // 4. Use Cases
-import { SendFriendRequestUseCase } from './use-case/SendFriendRequest.js';
-import { AcceptFriendRequestUseCase } from './use-case/acceptFriendRequest.js';
-import { RejectFriendRequestUseCase } from "./use-case/rejectFriendRequest.js";
-import { GetFriendsUseCase } from './use-case/getFriends.js';
-import { SearchUsersUseCase } from './use-case/searchUsers.js';
+import { SendFriendRequestUseCase } from './use-case/userUseCase/SendFriendRequest.js';
+import { AcceptFriendRequestUseCase } from './use-case/userUseCase/acceptFriendRequest.js';
+import { RejectFriendRequestUseCase } from "./use-case/userUseCase/rejectFriendRequest.js";
+import { GetFriendsUseCase } from './use-case/userUseCase/getFriends.js';
+import { SearchUsersUseCase } from './use-case/userUseCase/searchUsers.js';
 import { CreateChannel } from "./use-case/createChannel.js";
 
 // 5. Controllers
-import { UserController } from "./interface-adapters/controllers/userController.js";
-import { ResetPasswordController } from "./interface-adapters/controllers/resetPasswordController.js";
-import { FriendController } from './interface-adapters/controllers/friendController.js';
+import { UserController } from "./interface-adapters/controllers/userController/userController.js";
+import { ResetPasswordController } from "./interface-adapters/controllers/userController/resetPasswordController.js";
+import { FriendController } from './interface-adapters/controllers/userController/friendController.js';
 import { ChannelController } from "./interface-adapters/controllers/channelController.js";
-import { NotificationController } from "./interface-adapters/controllers/notificationController.js";
+import { NotificationController } from "./interface-adapters/controllers/userController/notificationController.js";
 
 // 6. Routes
 import { UserRoute } from "./interface-adapters/routes/userRoute.js";

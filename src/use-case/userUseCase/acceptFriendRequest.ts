@@ -1,11 +1,11 @@
 
 import { v4 as uuidv4 } from 'uuid';
-import { Friendship } from '../entities/friendship.js';
-import { Notification } from '../entities/notifications.js';
-import { IFriendRequestRepository } from './IFriendRequestRepository.js';
-import { IFriendshipRepository } from './IFriendshipRepository.js';
-import { INotificationRepository } from './INotificationRepository.js';
-import { NotificationController } from '../interface-adapters/controllers/notificationController.js';
+import { Friendship } from '../../entities/friendship.js';
+import { Notification } from '../../entities/notifications.js';
+import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
+import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
+import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
+import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 
 export class AcceptFriendRequestUseCase {
     constructor(

@@ -1,12 +1,11 @@
-// src/use-cases/SendFriendRequestUseCase.ts
 import { v4 as uuidv4 } from 'uuid';
-import { FriendRequest } from '../entities/friendRequest.js';
-import { IUserRepository } from './IUserRepository.js';
-import { IFriendRequestRepository } from './IFriendRequestRepository.js';
-import { IFriendshipRepository } from './IFriendshipRepository.js';
-import { INotificationRepository } from './INotificationRepository.js';
-import { NotificationController } from '../interface-adapters/controllers/notificationController.js';
-import { Notification } from '../entities/notifications.js';
+import { FriendRequest } from '../../entities/friendRequest.js';
+import { IUserRepository } from '../../interfaces/IUserRepository.js';
+import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
+import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
+import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
+import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
+import { Notification } from '../../entities/notifications.js';
 
 export class SendFriendRequestUseCase {
     constructor(

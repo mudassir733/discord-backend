@@ -1,5 +1,5 @@
 
-import { IFriendshipRepository } from '../../use-case/IFriendshipRepository.js';
+import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
 import { Friendship } from '../../entities/friendship.js';
 import { prisma } from '../../config/database.js';
 

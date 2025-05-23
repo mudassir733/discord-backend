@@ -1,6 +1,6 @@
-import { User } from '../entities/user.js';
-import { IFriendshipRepository } from './IFriendshipRepository.js';
-import { IUserRepository } from './IUserRepository.js';
+import { User } from '../../entities/user.js';
+import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
+import { IUserRepository } from '../../interfaces/IUserRepository.js';
 
 export class GetFriendsUseCase {
     constructor(

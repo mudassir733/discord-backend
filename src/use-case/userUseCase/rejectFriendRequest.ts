@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Notification } from '../entities/notifications.js';
-import { IFriendRequestRepository } from './IFriendRequestRepository.js';
-import { INotificationRepository } from './INotificationRepository.js';
-import { NotificationController } from '../interface-adapters/controllers/notificationController.js';
+import { Notification } from '../../entities/notifications.js';
+import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
+import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
+import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 
 
 export class RejectFriendRequestUseCase {

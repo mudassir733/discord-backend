@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { SendFriendRequestUseCase } from '../../use-case/SendFriendRequest.js';
-import { AcceptFriendRequestUseCase } from '../../use-case/acceptFriendRequest.js';
-import { GetFriendsUseCase } from '../../use-case/getFriends.js';
-import { RejectFriendRequestUseCase } from '../../use-case/rejectFriendRequest.js';
-import { SearchUsersUseCase } from '../../use-case/searchUsers.js';
+import { SendFriendRequestUseCase } from '../../../use-case/userUseCase/SendFriendRequest.js';
+import { AcceptFriendRequestUseCase } from '../../../use-case/userUseCase/acceptFriendRequest.js';
+import { GetFriendsUseCase } from '../../../use-case/userUseCase/getFriends.js';
+import { RejectFriendRequestUseCase } from '../../../use-case/userUseCase/rejectFriendRequest.js';
+import { SearchUsersUseCase } from '../../../use-case/userUseCase/searchUsers.js';
 
 interface AuthenticatedRequest extends Request {
     user?: { id: string };
