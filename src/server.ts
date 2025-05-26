@@ -27,12 +27,14 @@ import { ResetPasswordController } from "./interface-adapters/controllers/userCo
 import { FriendController } from './interface-adapters/controllers/userController/friendController.js';
 import { ChannelController } from "./interface-adapters/controllers/channelController.js";
 import { NotificationController } from "./interface-adapters/controllers/userController/notificationController.js";
+import { FriendRequestController } from "./interface-adapters/controllers/userController/friendRequestcontroller.js";
 
 // 6. Routes
 import { UserRoute } from "./interface-adapters/routes/userRoute.js";
 import { ResetPasswordRoutes } from "./interface-adapters/routes/resetPasswordRoute.js";
 import { FriendRoutes } from './interface-adapters/routes/friendRoute.js';
 import { ChannelRoutes } from "./interface-adapters/routes/channelRoute.js";
+import { FriendRequestRoutes } from "./interface-adapters/routes/friendRequestRoute.js";
 
 
 // utils
@@ -120,18 +122,21 @@ const friendController = new FriendController(
     getFriendsUseCase,
     searchUsersUseCase
 );
+const friendRequestController = new FriendRequestController(userRepository);
 const channelController = new ChannelController(createChannel);
 
 // 5. Routes
 const userRoutes = new UserRoute(userController);
 const resetPasswordRoutes = new ResetPasswordRoutes(resetPasswordController);
 const friendRoutes = new FriendRoutes(friendController);
+const friendRequestRoutes = new FriendRequestRoutes(friendRequestController);
 const channelRoutes = new ChannelRoutes(channelController);
 
 // 6. Register Endpoints
 app.use("/users", userRoutes.getRouter());
 app.use("/password", resetPasswordRoutes.getRouter());
 app.use("/api", friendRoutes.getRouter());
+app.use('/api/friend-requests', friendRequestRoutes.getRouter());
 app.use("/api", channelRoutes.getRouter());
 
 

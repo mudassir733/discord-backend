@@ -28,7 +28,10 @@ export class FriendController {
         }
         try {
             const friendRequest = await this.sendFriendRequestUseCase.execute(senderId!, receiverUsername);
-            res.status(200).json(friendRequest);
+            res.status(200).json({
+                friendRequest,
+                message: `Success! Your friend request to $username was sent. `
+            });
         } catch (error: any) {
             res.status(400).json({ error: error.message });
         }

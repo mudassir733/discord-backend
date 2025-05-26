@@ -59,7 +59,7 @@ export class LoginUser {
 
         const secret = process.env.JWT_SECRET_KEY!
 
-        const token = await jwt.sign(payload, secret, { expiresIn: "1h" })
+        const token = await jwt.sign(payload, secret, { expiresIn: "30d" })
 
         return {
             user,

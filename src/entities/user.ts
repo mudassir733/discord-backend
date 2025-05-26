@@ -4,7 +4,7 @@ export class User {
     private email: string;
     private phoneNumber?: string;
     private displayName: string;
-    private username: string;
+    private username: string | null;
     private password: string;
     private dateOfBirth: Date;
     private status: 'offline' | 'online' | 'idle' = 'offline';
@@ -37,7 +37,7 @@ export class User {
     getEmail(): string { return this.email; }
     getPhoneNumber(): string | undefined { return this.phoneNumber; }
     getDisplayName(): string { return this.displayName; }
-    getUsername(): string { return this.username; }
+    getUsername(): string | null { return this.username; }
     getPassword(): string { return this.password; }
     getDateOfBirth(): Date { return this.dateOfBirth; }
     getStatus(): 'offline' | 'online' | 'idle' { return this.status; }

@@ -46,6 +46,7 @@ model FriendRequest {
     sender     User     @relation("Sender", fields: [senderId], references: [id])
     receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
 
+    @@unique([senderId, receiverId])
     @@index([senderId]) // Index for queries on sent requests
     @@index([receiverId]) // Index for queries on received requests
     @@index([senderId, receiverId]) // Composite index for queries involving both
