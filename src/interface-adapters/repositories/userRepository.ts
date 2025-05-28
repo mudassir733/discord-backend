@@ -52,6 +52,7 @@ export class UserRepository implements IUserRepository {
             user.userName || '',
             '',
             user.dateOfBirth,
+            user.profilePicture || '',
             user.phoneNumber || '',
             user.status as 'offline' | 'online' | 'idle',
             user.lastActive || new Date()
@@ -161,6 +162,7 @@ export class UserRepository implements IUserRepository {
             user.userName || '',
             '',
             user.dateOfBirth,
+            user.profilePicture || '',
             user.phoneNumber || '',
             user.status as 'offline' | 'online' | 'idle',
             user.lastActive || new Date()
@@ -189,6 +191,7 @@ export class UserRepository implements IUserRepository {
             user.userName || '',
             '',
             user.dateOfBirth,
+            user.profilePicture || '',
             user.phoneNumber || '',
             user.status as 'offline' | 'online' | 'idle',
             user.lastActive = new Date()

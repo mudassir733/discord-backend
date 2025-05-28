@@ -39,6 +39,12 @@ export class FriendshipRepository implements IFriendshipRepository {
             where: {
                 OR: [{ user1Id: userId }, { user2Id: userId }],
             },
+            select: {
+                id: true,
+                user1Id: true,
+                user2Id: true,
+                createdAt: true,
+            }
         });
         return friendships.map(f => new Friendship(f.id, f.user1Id, f.user2Id, f.createdAt));
     }

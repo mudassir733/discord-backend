@@ -5,6 +5,7 @@ export class User {
     private phoneNumber?: string;
     private displayName: string;
     private username: string | null;
+    private profilePicture?: string;
     private password: string;
     private dateOfBirth: Date;
     private status: 'offline' | 'online' | 'idle' = 'offline';
@@ -17,6 +18,7 @@ export class User {
         username: string,
         password: string,
         dateOfBirth: Date,
+        profilePicture?: string,
         phoneNumber?: string,
         status: 'offline' | 'online' | 'idle' = 'offline',
         lastActive: Date = new Date()
@@ -27,6 +29,7 @@ export class User {
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
+        this.profilePicture = profilePicture;
         this.id = id;
         this.status = status;
         this.lastActive = lastActive;
@@ -53,6 +56,7 @@ export class User {
             displayName: this.displayName,
             username: this.username,
             dateOfBirth: this.dateOfBirth,
+            profilePicture: this.profilePicture,
             phoneNumber: this.phoneNumber,
             status: this.status,
             lastActive: this.lastActive,

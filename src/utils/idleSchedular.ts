@@ -8,7 +8,7 @@ export class IdleScheduler {
 
     constructor(private idleCallback: (userId: string) => Promise<void>, private notificationController: NotificationController) { }
 
-    schedule(userId: string, delayMinutes: number = 5): void {
+    schedule(userId: string, delayMinutes: number = 2): void {
         // Cancel existing job if any
         this.cancel(userId);
 
@@ -34,5 +34,9 @@ export class IdleScheduler {
     clearAll() {
         this.idleJobs.forEach((job) => job.cancel());
         this.idleJobs.clear();
+    }
+
+    setNotificationController(controller: NotificationController): void {
+        this.notificationController = controller;
     }
 }

@@ -6,9 +6,11 @@ import { IFriendRequestRepository } from '../../interfaces/IFriendRequestReposit
 import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
 import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
 import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
+import { IUserRepository } from '../../interfaces/IUserRepository.js';
 
 export class AcceptFriendRequestUseCase {
     constructor(
+        private userRepository: IUserRepository,
         private friendRequestRepository: IFriendRequestRepository,
         private friendshipRepository: IFriendshipRepository,
         private notificationRepository: INotificationRepository,
@@ -16,6 +18,8 @@ export class AcceptFriendRequestUseCase {
     ) { }
 
     async execute(requestId: string, userId: string): Promise<void> {
+        const user = await this.userRepository.findById(userId);
+        if (!user) throw new Error('User not found');
         const request = await this.friendRequestRepository.findById(requestId);
         if (!request) throw new Error('Friend request not found');
         if (request.getReceiverId() !== userId) throw new Error('Unauthorized');
@@ -31,12 +35,15 @@ export class AcceptFriendRequestUseCase {
             uuidv4(),
             request.getSenderId(),
             'friend_request_accepted',
-            `${userId} has accepted your friend request`,
+            `${user.getUsername()} has accepted your friend request`,
             new Date()
         )
         await this.notificationRepository.save(notification)
         await this.notificationController.sendNotification(notification)
 
+        // Refresh friend cache for both users
+        await this.notificationController.refreshFriendCache(userId)
+        await this.notificationController.refreshFriendCache(request.getSenderId())
 
     }
 }

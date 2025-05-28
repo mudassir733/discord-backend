@@ -65,16 +65,22 @@ model Friendship {
     @@index([user1Id, user2Id])
 }
 
+// enum NotificationType {
+//     FRIEND_REQUEST
+//     MESSAGE
+//     COMMENT
+// }
+
 model Notification {
-    id          String   @id @default(uuid())
-    recipientId String
-    type        String
-    message     String
-    createdAt   DateTime @default(now())
-    read        Boolean  @default(false)
+    id        String   @id @default(uuid())
+    userId    String
+    type      String
+    message   String
+    createdAt DateTime @default(now())
+    read      Boolean  @default(false)
 
-    recipient User @relation("Recipient", fields: [recipientId], references: [id])
+    recipient User @relation("Recipient", fields: [userId], references: [id])
 
-    @@index([recipientId])
+    @@index([userId])
     @@index([createdAt])
 }

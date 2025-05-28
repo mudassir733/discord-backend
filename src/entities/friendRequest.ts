@@ -27,4 +27,9 @@ export class FriendRequest {
     setStatus(status: 'pending' | 'accepted' | 'rejected'): void {
         this.status = status;
     }
+    setCreatedAt(createdAt: Date): void {
+        this.createdAt = createdAt;
+    }
 }
+
+

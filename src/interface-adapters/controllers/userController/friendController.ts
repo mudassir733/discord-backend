@@ -4,6 +4,7 @@ import { AcceptFriendRequestUseCase } from '../../../use-case/userUseCase/accept
 import { GetFriendsUseCase } from '../../../use-case/userUseCase/getFriends.js';
 import { RejectFriendRequestUseCase } from '../../../use-case/userUseCase/rejectFriendRequest.js';
 import { SearchUsersUseCase } from '../../../use-case/userUseCase/searchUsers.js';
+import { GetSentFriendRequestsInputUseCase, GetSentFriendRequestsUseCase } from '../../../use-case/userUseCase/getSendFriendRequest.js';
 
 interface AuthenticatedRequest extends Request {
     user?: { id: string };
@@ -15,7 +16,8 @@ export class FriendController {
         private acceptFriendRequestUseCase: AcceptFriendRequestUseCase,
         private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
         private getFriendsUseCase: GetFriendsUseCase,
-        private searchUsersUseCase: SearchUsersUseCase
+        private searchUsersUseCase: SearchUsersUseCase,
+        private getSentFriendRequestsUseCase: GetSentFriendRequestsUseCase
     ) { }
 
 
@@ -28,10 +30,7 @@ export class FriendController {
         }
         try {
             const friendRequest = await this.sendFriendRequestUseCase.execute(senderId!, receiverUsername);
-            res.status(200).json({
-                friendRequest,
-                message: `Success! Your friend request to $username was sent. `
-            });
+            res.status(200).json(friendRequest);
         } catch (error: any) {
             res.status(400).json({ error: error.message });
         }
@@ -77,6 +76,18 @@ export class FriendController {
         try {
             const users = await this.searchUsersUseCase.execute(query as string, currentUserId!);
             res.status(200).json(users);
+        } catch (error: any) {
+            res.status(400).json({ error: error.message });
+        }
+    }
+
+    async getSentFriendRequests(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const userId = req.user?.id;
+            if (!userId) throw new Error('User ID not found in token');
+            const input: GetSentFriendRequestsInputUseCase = { userId };
+            const friendRequests = await this.getSentFriendRequestsUseCase.execute(input);
+            res.status(200).json(friendRequests);
         } catch (error: any) {
             res.status(400).json({ error: error.message });
         }

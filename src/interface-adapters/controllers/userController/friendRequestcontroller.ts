@@ -6,8 +6,11 @@ import { AuthenticatedRequest } from '../../../middleware/authMiddleware.js';
 export class FriendRequestController {
     private getIncommingFriendRequest: GetIncomingFriendRequests
 
+
+
     constructor(userRepository: IUserRepository) {
         this.getIncommingFriendRequest = new GetIncomingFriendRequests(userRepository);
+
     }
 
     async getIncomingFriendRequests(req: AuthenticatedRequest, res: Response): Promise<void> {
@@ -21,4 +24,6 @@ export class FriendRequestController {
             res.status(400).json({ error: error.message });
         }
     }
+
+
 }

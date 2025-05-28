@@ -7,6 +7,12 @@ import { INotificationRepository } from '../../interfaces/INotificationRepositor
 import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 import { Notification } from '../../entities/notifications.js';
 
+
+export interface SendFriendRequestResponse {
+    friendRequest: FriendRequest;
+    message: string;
+}
+
 export class SendFriendRequestUseCase {
     constructor(
         private userRepository: IUserRepository,
@@ -16,7 +22,7 @@ export class SendFriendRequestUseCase {
         private notificationController: NotificationController
     ) { }
 
-    async execute(senderId: string, receiverUsername: string): Promise<FriendRequest> {
+    async execute(senderId: string, receiverUsername: string): Promise<SendFriendRequestResponse> {
         const sender = await this.userRepository.findById(senderId);
         if (!sender) throw new Error('Sender not found');
 
@@ -31,8 +37,20 @@ export class SendFriendRequestUseCase {
         const pendingRequest = await this.friendRequestRepository.findPendingBySenderAndReceiver(sender.getId()!, receiver.getId()!);
         if (pendingRequest) throw new Error('Friend request already sent');
 
-        const friendRequest = new FriendRequest(uuidv4(), sender.getId()!, receiver.getId()!, 'pending', new Date());
-        const savedRequest = await this.friendRequestRepository.save(friendRequest);
+        // rejected request
+        let friendRequest: FriendRequest;
+        const rejectedRequest = await this.friendRequestRepository.findRejectedBySenderAndReceiver(sender.getId()!, receiver.getId()!);
+
+        if (rejectedRequest) {
+            // Update the rejected request to pending
+            rejectedRequest.setStatus('pending');
+            rejectedRequest.setCreatedAt(new Date());
+            friendRequest = await this.friendRequestRepository.save(rejectedRequest);
+        } else {
+            // Create a new friend request
+            friendRequest = new FriendRequest(uuidv4(), sender.getId()!, receiver.getId()!, 'pending', new Date());
+            friendRequest = await this.friendRequestRepository.save(friendRequest);
+        }
 
         const notification = new Notification(
             uuidv4(),
@@ -44,6 +62,9 @@ export class SendFriendRequestUseCase {
         await this.notificationRepository.save(notification);
         await this.notificationController.sendNotification(notification)
 
-        return savedRequest;
+        return {
+            friendRequest,
+            message: `Friend request sent to ${receiver.getUsername()}`
+        };
     }
 }
