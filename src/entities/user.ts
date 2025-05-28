@@ -4,9 +4,12 @@ export class User {
     private email: string;
     private phoneNumber?: string;
     private displayName: string;
-    private username: string;
+    private username: string | null;
+    private profilePicture?: string;
     private password: string;
     private dateOfBirth: Date;
+    private status: 'offline' | 'online' | 'idle' = 'offline';
+    private lastActive: Date;
 
     constructor(
         id: string,
@@ -15,7 +18,10 @@ export class User {
         username: string,
         password: string,
         dateOfBirth: Date,
+        profilePicture?: string,
         phoneNumber?: string,
+        status: 'offline' | 'online' | 'idle' = 'offline',
+        lastActive: Date = new Date()
     ) {
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -23,7 +29,10 @@ export class User {
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
+        this.profilePicture = profilePicture;
         this.id = id;
+        this.status = status;
+        this.lastActive = lastActive;
     }
 
     // Getters
@@ -31,11 +40,14 @@ export class User {
     getEmail(): string { return this.email; }
     getPhoneNumber(): string | undefined { return this.phoneNumber; }
     getDisplayName(): string { return this.displayName; }
-    getUsername(): string { return this.username; }
+    getUsername(): string | null { return this.username; }
     getPassword(): string { return this.password; }
     getDateOfBirth(): Date { return this.dateOfBirth; }
+    getStatus(): 'offline' | 'online' | 'idle' { return this.status; }
     // Setter for ID (set by repository after saving)
     setId(id: string): void { this.id = id; }
+    // Setter for status
+    setStatus(status: 'offline' | 'online' | 'idle'): void { this.status = status; }
 
     toJSON(): object {
         return {
@@ -44,7 +56,10 @@ export class User {
             displayName: this.displayName,
             username: this.username,
             dateOfBirth: this.dateOfBirth,
+            profilePicture: this.profilePicture,
             phoneNumber: this.phoneNumber,
+            status: this.status,
+            lastActive: this.lastActive,
         };
     }
 }

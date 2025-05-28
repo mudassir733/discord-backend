@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../use-case/IUserRepository.js";
+import { IUserRepository, FriendRequest } from "../../interfaces/IUserRepository.js";
 import { User } from "../../entities/user.js";
 import { prisma } from "../../config/database.js";
 
@@ -15,7 +15,8 @@ export class UserRepository implements IUserRepository {
                 displayName: user.getDisplayName(),
                 userName: user.getUsername(),
                 password: user.getPassword(),
-                dateOfBirth: user.getDateOfBirth()
+                dateOfBirth: user.getDateOfBirth(),
+                status: user.getStatus(),
             }
         })
         const newUser = new User(
@@ -26,6 +27,7 @@ export class UserRepository implements IUserRepository {
             createdUser.password,
             createdUser.dateOfBirth,
             createdUser.phoneNumber || '',
+            createdUser.status as 'offline' | 'online' | 'idle',
         )
         return newUser
     }
@@ -45,14 +47,47 @@ export class UserRepository implements IUserRepository {
 
         return users.map(user => new User(
             user.id,
-            user.userName || '',
             user.email,
+            user.displayName,
+            user.userName || '',
+            '',
+            user.dateOfBirth,
+            user.profilePicture || '',
             user.phoneNumber || '',
-            user.password,
-            user.createdAt
+            user.status as 'offline' | 'online' | 'idle',
+            user.lastActive || new Date()
         ));
 
+    }
 
+
+    async getIncomingFriendRequests(userId: string): Promise<FriendRequest[]> {
+        const friendRequests = await prisma.friendRequest.findMany({
+            where: {
+                receiverId: userId,
+                status: 'pending'
+            },
+            include: {
+                sender: {
+                    select: {
+                        id: true,
+                        userName: true,
+                        displayName: true,
+                        profilePicture: true,
+                    }
+                }
+            }
+        });
+
+        return friendRequests.map(request => ({
+            id: request.id,
+            senderId: request.senderId,
+            senderUsername: request.sender.userName || '',
+            senderDisplayName: request.sender.displayName,
+            senderProfilePicture: request.sender.profilePicture,
+            status: request.status,
+            createdAt: request.createdAt
+        }));
     }
 
 
@@ -119,17 +154,31 @@ export class UserRepository implements IUserRepository {
 
     async findById(id: string): Promise<User | null> {
         const user = await prisma.user.findUnique({ where: { id } });
-        console.log('Finding user by ID:', id);
         if (!user) return null;
         return new User(
             user.id,
             user.email,
             user.displayName,
-            '',
             user.userName || '',
+            '',
             user.dateOfBirth,
-            user.phoneNumber || ''
+            user.profilePicture || '',
+            user.phoneNumber || '',
+            user.status as 'offline' | 'online' | 'idle',
+            user.lastActive || new Date()
         );
+    }
+
+    async updateUserStatus(userId: string, status: string): Promise<void> {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                status,
+                lastActive: new Date()
+            },
+        });
+        if (!user) throw new Error('User not found');
+
     }
 
 
@@ -142,7 +191,11 @@ export class UserRepository implements IUserRepository {
             user.userName || '',
             '',
             user.dateOfBirth,
-            user.phoneNumber || ''
+            user.profilePicture || '',
+            user.phoneNumber || '',
+            user.status as 'offline' | 'online' | 'idle',
+            user.lastActive = new Date()
+
         ))
     }
 

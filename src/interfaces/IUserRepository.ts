@@ -1,5 +1,12 @@
 import { User } from "../entities/user.js";
 
+export interface FriendRequest {
+    id: string;
+    senderId: string;
+    senderUsername: string;
+    senderDisplayName: string;
+    createdAt: Date;
+}
 
 export interface IUserRepository {
     save(user: User): Promise<User>;
@@ -10,7 +17,9 @@ export interface IUserRepository {
     findById(id: string): Promise<User | null>;
     updatePassword(userId: string, hashPassword: string): Promise<void>;
     updatePasswordByEmail(email: string, hashedPassword: string): Promise<void>;
+    updateUserStatus(userId: string, status: string): Promise<void>;
     findAll(): Promise<User[]>;
     searchByUsername(query: string, excludeUserId: string): Promise<User[]>;
+    getIncomingFriendRequests(userId: string): Promise<FriendRequest[]>;
 
 }

@@ -1,7 +1,7 @@
-import { IUserRepository } from "./IUserRepository.js";
+import { IUserRepository } from "../../interfaces/IUserRepository.js";
 import { v4 as uuidv4 } from "uuid"
-import { prisma } from "../config/database.js"
-import { sendPasswordResetEmail } from "../utils/emailService.js";
+import { prisma } from "../../config/database.js"
+import { sendPasswordResetEmail } from "../../utils/emailService.js";
 
 
 export interface InitiatePasswordResetInput {

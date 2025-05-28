@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { FriendController } from '../controllers/friendController.js';
+import { FriendController } from '../controllers/userController/friendController.js';
 import { authMiddleware } from '../../middleware/authMiddleware.js';
 
 export class FriendRoutes {
@@ -17,6 +17,7 @@ export class FriendRoutes {
         this.router.post('/friend-request/:id/reject', authMiddleware, this.controller.rejectFriendRequest.bind(this.controller))
         this.router.get('/friends', authMiddleware, this.controller.getFriends.bind(this.controller));
         this.router.get('/users/search', authMiddleware, this.controller.searchUsers.bind(this.controller));
+        this.router.get('/friend-requests/sent', authMiddleware, this.controller.getSentFriendRequests.bind(this.controller));
     }
 
     getRouter(): Router {

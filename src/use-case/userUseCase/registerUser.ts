@@ -1,5 +1,5 @@
-import { User } from "../entities/user.js";
-import { IUserRepository } from "./IUserRepository.js";
+import { User } from "../../entities/user.js";
+import { IUserRepository } from "../../interfaces/IUserRepository.js";
 import * as bcrypt from "bcrypt"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
@@ -22,6 +22,7 @@ export interface RegisterUserInput {
     phoneNumber?: string;
     password: string;
     dateOfBirth: string;
+    status: string;
 }
 
 
@@ -47,10 +48,12 @@ export class RegisterUser {
             if (existingPhoneNumber) throw new Error("User with this phone number already exists");
 
         }
+
         //hash password
         const hashedPassword = await bcrypt.hash(validatedInput.password, 10);
 
         const uuid = uuidv4();
+
 
         // create new User
         const user = new User(
@@ -60,7 +63,8 @@ export class RegisterUser {
             validatedInput.userName,
             hashedPassword,
             new Date(validatedInput.dateOfBirth),
-            validatedInput.phoneNumber
+            validatedInput.phoneNumber,
+            input.status as 'offline' | 'online' | 'idle'
         );
 
         // save user
@@ -73,7 +77,7 @@ export class RegisterUser {
             displayName: saveUser.getDisplayName(),
         }
         const secret = process.env.JWT_SECRET_KEY!
-        const token = await jwt.sign(payload, secret, { expiresIn: "1h" })
+        const token = await jwt.sign(payload, secret, { expiresIn: "30d" })
         return { user: saveUser, token }
 
     }
