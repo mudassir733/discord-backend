@@ -20,7 +20,7 @@ export class NotificationController {
         this.setupSocketEvents();
         this.friendshipRepository = friendshipRepository;
         this.friendCache = new Map();
-        this.cacheTTL = 5 * 60 * 1000; // 5 minutes
+        this.cacheTTL = 10 * 60 * 1000; // 5 minutes
         this.userRepository = userRepository;
         this.idleScheduler = idleScheduler;
     }

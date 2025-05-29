@@ -1,7 +1,7 @@
 import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
 import { Notification } from '../../entities/notifications.js';
 import { prisma } from '../../config/database.js';
-import { boolean } from 'zod';
+
 
 export class NotificationRepository implements INotificationRepository {
     async save(notification: Notification): Promise<Notification> {
