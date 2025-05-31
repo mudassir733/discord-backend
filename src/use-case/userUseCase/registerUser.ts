@@ -75,6 +75,7 @@ export class RegisterUser {
             email: saveUser.getEmail(),
             userName: saveUser.getUsername(),
             displayName: saveUser.getDisplayName(),
+            status: saveUser.getStatus()
         }
         const secret = process.env.JWT_SECRET_KEY!
         const token = await jwt.sign(payload, secret, { expiresIn: "30d" })

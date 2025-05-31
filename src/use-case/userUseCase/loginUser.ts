@@ -54,7 +54,8 @@ export class LoginUser {
             id: user.getId(),
             email: user.getEmail(),
             username: user.getUsername(),
-            displayName: user.getDisplayName()
+            displayName: user.getDisplayName(),
+            status: user.getStatus()
         }
 
         const secret = process.env.JWT_SECRET_KEY!

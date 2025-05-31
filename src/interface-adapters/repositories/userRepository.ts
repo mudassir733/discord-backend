@@ -32,15 +32,26 @@ export class UserRepository implements IUserRepository {
         return newUser
     }
 
+
+
     async searchByUsername(query: string, excludeUserId: string): Promise<User[]> {
+        const friends = await prisma.friendship.findMany({
+            where: {
+                OR: [
+                    { user1Id: excludeUserId },
+                    { user2Id: excludeUserId }
+                ],
+            },
+        })
+        const friendIds = friends.map(friendship =>
+            friendship.user1Id === excludeUserId ? friendship.user2Id : friendship.user1Id
+        );
         const users = await prisma.user.findMany({
             where: {
+                id: { in: friendIds },
                 userName: {
                     contains: query,
                     mode: 'insensitive'
-                },
-                NOT: {
-                    id: excludeUserId
                 }
             }
         });
@@ -59,7 +70,6 @@ export class UserRepository implements IUserRepository {
         ));
 
     }
-
 
     async getIncomingFriendRequests(userId: string): Promise<FriendRequest[]> {
         const friendRequests = await prisma.friendRequest.findMany({

@@ -48,4 +48,7 @@ export class FriendshipRepository implements IFriendshipRepository {
         });
         return friendships.map(f => new Friendship(f.id, f.user1Id, f.user2Id, f.createdAt));
     }
+
+
+
 }
