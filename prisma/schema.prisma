@@ -35,6 +35,8 @@ model User {
     friendships1       Friendship[]         @relation("User1")
     friendships2       Friendship[]         @relation("User2")
     notifications      Notification[]       @relation("Recipient")
+    ChannelMembers     ChannelMembers[]
+    Message            Message[]
 }
 
 model FriendRequest {
@@ -83,4 +85,35 @@ model Notification {
 
     @@index([userId])
     @@index([createdAt])
+}
+
+model ChannelMembers {
+    id        String  @id @default(uuid())
+    channelId String
+    userId    String
+    Channel   Channel @relation(fields: [channelId], references: [id])
+    user      User    @relation(fields: [userId], references: [id])
+
+    @@unique([channelId, userId])
+    @@index([userId])
+}
+
+model Message {
+    id        String   @id @default(uuid())
+    sender    User     @relation(fields: [senderId], references: [id])
+    senderId  String
+    channelId String
+    content   String
+    createdAt DateTime @default(now())
+    Channel   Channel  @relation(fields: [channelId], references: [id])
+
+    @@index([channelId, createdAt])
+}
+
+model Channel {
+    id       String           @id @default(uuid())
+    isDirect Boolean          @default(false)
+    name     String?
+    members  ChannelMembers[]
+    message  Message[]
 }
