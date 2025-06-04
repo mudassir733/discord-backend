@@ -5,10 +5,8 @@ import { GetFriendsUseCase } from '../../../use-case/userUseCase/getFriends.js';
 import { RejectFriendRequestUseCase } from '../../../use-case/userUseCase/rejectFriendRequest.js';
 import { SearchUsersUseCase } from '../../../use-case/userUseCase/searchUsers.js';
 import { GetSentFriendRequestsInputUseCase, GetSentFriendRequestsUseCase } from '../../../use-case/userUseCase/getSendFriendRequest.js';
+import { AuthenticatedRequest } from '../../../middleware/authMiddleware.js';
 
-interface AuthenticatedRequest extends Request {
-    user?: { id: string };
-}
 
 export class FriendController {
     constructor(
@@ -75,6 +73,10 @@ export class FriendController {
         const currentUserId = req.user?.id;
         try {
             const users = await this.searchUsersUseCase.execute(query as string, currentUserId!);
+            if (!users) {
+                res.status(404).json({ error: 'Users not found' });
+                return;
+            }
             res.status(200).json(users);
         } catch (error: any) {
             res.status(400).json({ error: error.message });

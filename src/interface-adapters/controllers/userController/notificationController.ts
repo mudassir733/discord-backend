@@ -4,6 +4,7 @@ import { IFriendshipRepository } from "../../../interfaces/IFriendshipRepository
 import { IUserRepository } from "../../../interfaces/IUserRepository.js";
 import { IdleScheduler } from "../../../utils/idleSchedular.js";
 
+
 export class NotificationController {
     private io: Server;
     private userSockets: Map<string, Socket> = new Map();
@@ -20,8 +21,9 @@ export class NotificationController {
         this.setupSocketEvents();
         this.friendshipRepository = friendshipRepository;
         this.friendCache = new Map();
-        this.cacheTTL = 5 * 60 * 1000; // 5 minutes
+        this.cacheTTL = 10 * 60 * 1000; // 5 minutes
         this.userRepository = userRepository;
+
         this.idleScheduler = idleScheduler;
     }
 
@@ -107,4 +109,7 @@ export class NotificationController {
             console.error(`Error refreshing friend cache for user ${userId}:`, error);
         }
     }
+
+
+
 }
