@@ -1,6 +1,7 @@
 import { IChannelRepository } from "../../interfaces/chats-interfaces/IChannelRepository.js";
 import { IChannelMembersRepository } from "../../interfaces/chats-interfaces/IChannelMemeberRepository.js";
 import { IUserRepository } from "../../interfaces/IUserRepository.js";
+import { SocketController } from "../../interface-adapters/controllers/socket-controller.js";
 import { Channel } from "../../entities/chats/channels.js";
 
 export interface createDirectChannelRequest {
@@ -9,9 +10,17 @@ export interface createDirectChannelRequest {
 }
 
 export class createDirectChannelUseCase {
+    private socketController?: SocketController
+
+
     constructor(private channelRepository: IChannelRepository,
         private channelMembersRepository: IChannelMembersRepository,
-        private userRepository: IUserRepository) { }
+        private userRepository: IUserRepository,
+    ) { }
+
+    setSocketController(socket: SocketController) {
+        this.socketController = socket;
+    }
 
     async execute(request: createDirectChannelRequest): Promise<Channel> {
         const { userId, otherUserUsername } = request;
@@ -39,6 +48,10 @@ export class createDirectChannelUseCase {
 
         await this.channelMembersRepository.create(channel.getId(), userId);
         await this.channelMembersRepository.create(channel.getId(), otherUser.getId()!);
+
+
+        this.socketController?.notifyUserJoinChannel(userId, channel.getId());
+        this.socketController?.notifyUserJoinChannel(otherUser.getId()!, channel.getId());
 
         return channel;
     }

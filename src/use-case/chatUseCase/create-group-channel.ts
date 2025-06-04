@@ -1,6 +1,7 @@
 import { IChannelRepository } from "../../interfaces/chats-interfaces/IChannelRepository.js";
 import { IChannelMembersRepository } from "../../interfaces/chats-interfaces/IChannelMemeberRepository.js";
 import { Channel } from "../../entities/chats/channels.js";
+import { SocketController } from "../../interface-adapters/controllers/socket-controller.js";
 
 export interface createGroupChannelRequest {
     name: string;
@@ -9,10 +10,16 @@ export interface createGroupChannelRequest {
 }
 
 export class CreateGroupChannelUseCase {
+    private socketController?: SocketController
+
     constructor(
         private readonly channelRepository: IChannelRepository,
-        private readonly channelMembersRepository: IChannelMembersRepository
+        private readonly channelMembersRepository: IChannelMembersRepository,
+
     ) { }
+    setSocketController(socket: SocketController) {
+        this.socketController = socket;
+    }
 
     async execute(request: createGroupChannelRequest): Promise<Channel> {
         const { name, creatorId, membersIds } = request;
@@ -21,8 +28,10 @@ export class CreateGroupChannelUseCase {
         const uniquerMemberIds = [...new Set([creatorId, ...membersIds])]
 
 
+
         for (const userId of uniquerMemberIds) {
             await this.channelMembersRepository.create(channel.getId(), userId)
+            this.socketController?.notifyUserJoinChannel(userId, channel.getId());
         }
 
         return channel;
