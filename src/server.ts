@@ -1,7 +1,8 @@
 // 1. Core Modules
 import express from "express";
 import { createServer } from "http";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
+
 
 // 2. Configuration / Database
 import { prisma, connectToDatabase } from "./config/database.js";
@@ -12,7 +13,9 @@ import { FriendRequestRepository } from './interface-adapters/repositories/frien
 import { FriendshipRepository } from './interface-adapters/repositories/friendShipRepository.js';
 import { DiscordRepository } from "./interface-adapters/repositories/disordRepository.js";
 import { NotificationRepository } from "./interface-adapters/repositories/notificationRepository.js";
-
+import { ChannelRepository } from "./interface-adapters/repositories/chat-repositories/channel-repository.js";
+import { ChannelMemebersRepository } from "./interface-adapters/repositories/chat-repositories/channel-members-repository.js";
+import { MessageRepository } from "./interface-adapters/repositories/chat-repositories/messages-repository.js";
 
 // 4. Use Cases
 import { SendFriendRequestUseCase } from './use-case/userUseCase/SendFriendRequest.js';
@@ -22,6 +25,10 @@ import { GetFriendsUseCase } from './use-case/userUseCase/getFriends.js';
 import { SearchUsersUseCase } from './use-case/userUseCase/searchUsers.js';
 import { CreateChannel } from "./use-case/createChannel.js";
 import { GetSentFriendRequestsUseCase } from "./use-case/userUseCase/getSendFriendRequest.js";
+import { createDirectChannelUseCase } from "./use-case/chatUseCase/create-direct-channel.js";
+import { CreateGroupChannelUseCase } from "./use-case/chatUseCase/create-group-channel.js";
+import { joinChannelUseCase } from "./use-case/chatUseCase/join-channel.js";
+import { SendMessageUseCase } from "./use-case/chatUseCase/send-message.js";
 
 // 5. Controllers
 import { UserController } from "./interface-adapters/controllers/userController/userController.js";
@@ -31,6 +38,8 @@ import { ChannelController } from "./interface-adapters/controllers/channelContr
 import { NotificationController } from "./interface-adapters/controllers/userController/notificationController.js";
 import { FriendRequestController } from "./interface-adapters/controllers/userController/friendRequestcontroller.js";
 import { NotificationRestController } from "./interface-adapters/controllers/userController/notificationResetController.js";
+import { ChatController } from "./interface-adapters/controllers/chatController/chat-controller.js";
+import { SocketController } from "./interface-adapters/controllers/socket-controller.js";
 
 // 6. Routes
 import { UserRoute } from "./interface-adapters/routes/userRoute.js";
@@ -39,6 +48,7 @@ import { FriendRoutes } from './interface-adapters/routes/friendRoute.js';
 import { ChannelRoutes } from "./interface-adapters/routes/channelRoute.js";
 import { FriendRequestRoutes } from "./interface-adapters/routes/friendRequestRoute.js";
 import { NotificationRoutes } from "./interface-adapters/routes/notificationRoute.js";
+import { ChatRoutes } from "./interface-adapters/routes/chat-routes/chat.routes.js";
 
 
 // utils
@@ -74,6 +84,46 @@ const friendshipRepository = new FriendshipRepository();
 const notificationRepository = new NotificationRepository();
 const discordRepository = new DiscordRepository();
 
+// core chat Repositories
+const channelRepository = new ChannelRepository();
+const channelMembersRepository = new ChannelMemebersRepository();
+const messageRepository = new MessageRepository();
+
+
+// 2. chat Use Cases
+
+const createDirectChannel = new createDirectChannelUseCase(
+    channelRepository,
+    channelMembersRepository,
+    userRepository
+
+);
+const createGroupChannel = new CreateGroupChannelUseCase(
+    channelRepository,
+    channelMembersRepository
+);
+const joinChannel = new joinChannelUseCase(channelRepository, channelMembersRepository);
+const sendMessage = new SendMessageUseCase(messageRepository, channelMembersRepository);
+
+// 3. chat Controllers
+const chatController = new ChatController(
+    createGroupChannel,
+    createDirectChannel,
+    joinChannel,
+    messageRepository
+);
+
+const socketController: SocketController = new SocketController(
+    io,
+    channelMembersRepository,
+    sendMessage,
+    joinChannel
+); // Moved up for dependency
+
+// 3. Inject socketController into use cases after it's created
+joinChannel.setSocketController(socketController)
+createDirectChannel.setSocketController(socketController);
+createGroupChannel.setSocketController(socketController);
 
 // Idle Scheduler
 const idleScheduler = new IdleScheduler(
@@ -87,8 +137,9 @@ const idleScheduler = new IdleScheduler(
     null as any
 );
 
-// 2. Socket Controllers
-const notificationController = new NotificationController(io,
+// 2. Socket notification Controllers
+const notificationController = new NotificationController(
+    io,
     friendshipRepository,
     userRepository,
     idleScheduler
@@ -157,6 +208,8 @@ const friendRoutes = new FriendRoutes(friendController);
 const friendRequestRoutes = new FriendRequestRoutes(friendRequestController);
 const channelRoutes = new ChannelRoutes(channelController);
 const notificationRoutes = new NotificationRoutes(notificationRestController);
+// chat routes
+const chatRoutes = new ChatRoutes(chatController);
 
 // 6. Register Endpoints
 app.use("/users", userRoutes.getRouter());
@@ -165,6 +218,9 @@ app.use("/api", friendRoutes.getRouter());
 app.use('/api/notifications', notificationRoutes.getRouter());
 app.use('/api/friend-requests', friendRequestRoutes.getRouter());
 app.use("/api", channelRoutes.getRouter());
+app.use("/api/chat", chatRoutes.getRouter())
+
+
 
 
 

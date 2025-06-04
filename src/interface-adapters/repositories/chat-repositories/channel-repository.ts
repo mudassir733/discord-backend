@@ -26,7 +26,7 @@ export class ChannelRepository implements IChannelRepository {
                 isDirect: true,
                 members: {
                     every: {
-                        userId: { in: [user1Id, user1Id] }
+                        userId: { in: [user1Id, user2Id] }
                     }
                 },
             },
