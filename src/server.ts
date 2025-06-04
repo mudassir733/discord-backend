@@ -3,7 +3,6 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-
 // 2. Configuration / Database
 import { prisma, connectToDatabase } from "./config/database.js";
 
@@ -36,9 +35,6 @@ app.use(express.json());
 
 const container = new Container(io);
 
-
-
-
 // 6. Register Endpoints
 app.use("/users", container.getUserRoutes().getRouter());
 app.use("/password", container.getResetPasswordRoutes().getRouter());
@@ -47,11 +43,6 @@ app.use('/api/notifications', container.getNotificationRoutes().getRouter());
 app.use('/api/friend-requests', container.getFriendRequestRoutes().getRouter());
 app.use("/api", container.getChannelRoutes().getRouter());
 app.use("/api/chat", container.getChatRoutes().getRouter())
-
-
-
-
-
 
 // start server 
 async function startServer() {
@@ -64,7 +55,6 @@ async function startServer() {
         process.exit(1);
     }
 }
-
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
