@@ -20,6 +20,7 @@ export class ChatRoutes {
         this.router.post('/group', authMiddleware, this.chatController.createGroupChannel.bind(this.chatController));
         this.router.post('/join', authMiddleware, this.chatController.joinChannel.bind(this.chatController));
         this.router.get('/messages/:channelId', authMiddleware, this.chatController.getMessages.bind(this.chatController));
+        this.router.get('/direct/:otherUserId', authMiddleware, this.chatController.getDirectChannel.bind(this.chatController));
     }
 
     public getRouter(): Router {

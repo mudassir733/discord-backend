@@ -30,6 +30,7 @@ export class createDirectChannelUseCase {
         }
 
         const otherUser = await this.userRepository.findByUserName(otherUserUsername);
+
         if (!otherUser) {
             throw new Error("Other user not found");
         }

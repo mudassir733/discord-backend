@@ -43,6 +43,29 @@ export class ChatController {
         }
     }
 
+    async getDirectChannel(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const userId = req.user?.id;
+            const otherUserId = req.params.otherUserId;
+
+
+            if (!userId || !otherUserId) {
+                throw new Error("missing user id or otherUserId!");
+            }
+            const channel = await this.createDirectChannelUseCase.execute({ userId, otherUserUsername: otherUserId });
+            res.status(200).json({
+                channelId: channel.getId(),
+                name: channel.getName(),
+                isDirectChannel: channel.isDirectChannel()
+
+            });
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+
+        }
+    }
+
+
     async createGroupChannel(req: AuthenticatedRequest, res: Response): Promise<void> {
         try {
             const { name, membersIds } = req.body;

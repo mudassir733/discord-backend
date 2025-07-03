@@ -47,16 +47,6 @@ export class SocketController {
                         createAt: message.getCreateAt(),
                         senderId: message.getSenderId()
                     })
-                    const sender = this.userSockets.get(userId as string);
-                    if (sender) {
-                        this.io.to(sender.id).emit('receive_message', {
-                            id: message.getId(),
-                            content: message.getContent(),
-                            channelId: message.getChannelId(),
-                            createAt: message.getCreateAt(),
-                            senderId: message.getSenderId()
-                        })
-                    }
                 } catch (error) {
                     socket.emit('error', { message: (error as Error).message });
                 }
