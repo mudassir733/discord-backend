@@ -1,7 +1,8 @@
 {
     "watch": [
-        "dist"
+        "src"
     ],
     "ext": "ts",
-    "exec": "ts-node dist/server.js"
+    "exec": "node --no-warnings --loader ts-node/esm src/server.ts",
+    "verbose": true
 }
