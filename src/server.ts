@@ -42,7 +42,7 @@ app.use("/api", container.getFriendRoutes().getRouter());
 app.use('/api/notifications', container.getNotificationRoutes().getRouter());
 app.use('/api/friend-requests', container.getFriendRequestRoutes().getRouter());
 app.use("/api", container.getChannelRoutes().getRouter());
-app.use("/api/chat", container.getChatRoutes().getRouter())
+
 
 // start server 
 async function startServer() {
