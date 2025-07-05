@@ -30,7 +30,6 @@ export class ChatController {
         try {
             const { otherUserUsername } = req.body;
             const userId = req.user?.id;
-            console.log("USER IDD", userId)
             if (!userId) throw new Error('user id not found');
             const channel = await this.createDirectChannelUseCase.execute({ userId, otherUserUsername });
             res.status(201).json({
