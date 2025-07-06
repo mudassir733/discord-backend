@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ChannelController } from "../controllers/channelController.js";
+import { ChannelController } from "../../controllers/channelController.js";
 
 export class ChannelRoutes {
     private router: Router = Router();

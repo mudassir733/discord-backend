@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { ResetPasswordController } from '../controllers/userController/resetPasswordController.js';
+import { ResetPasswordController } from '../../controllers/auth/reset.password.controller.js';
 
 export class ResetPasswordRoutes {
     private router: Router = express.Router();

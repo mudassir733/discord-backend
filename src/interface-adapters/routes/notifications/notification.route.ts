@@ -1,12 +1,12 @@
 import express, { Router } from 'express';
-import { NotificationRestController } from '../controllers/userController/notificationResetController.js';
-import { authMiddleware } from '../../middleware/authMiddleware.js';
+import { NotificationController } from '../../controllers/notifications/notification.controller.js';
+import { authMiddleware } from '../../../middleware/authMiddleware.js';
 
 export class NotificationRoutes {
     private router: Router = express.Router();
-    private controller: NotificationRestController;
+    private controller: NotificationController;
 
-    constructor(controller: NotificationRestController) {
+    constructor(controller: NotificationController) {
         this.controller = controller;
         this.initRoutes();
     }

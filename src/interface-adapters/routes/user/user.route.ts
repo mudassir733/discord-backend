@@ -1,6 +1,5 @@
 import express, { Router } from "express";
-import { UserController } from "../controllers/userController/userController.js";
-import { authMiddleware } from "../../middleware/authMiddleware.js";
+import { UserController } from "../../controllers/user/user.controller.js";
 
 
 export class UserRoute {
@@ -13,9 +12,6 @@ export class UserRoute {
     }
 
     private initRoutes(): void {
-        this.router.post('/register', (req, res) => this.controller.register(req, res));
-        this.router.post('/login', (req, res) => this.controller.login(req, res));
-        this.router.post('/logout', authMiddleware, this.controller.logout.bind(this.controller));
         this.router.get('/me/:id', (req, res) => this.controller.getUserById(req, res));
         this.router.get('/me', (req, res) => this.controller.getAllUser(req, res))
     }
