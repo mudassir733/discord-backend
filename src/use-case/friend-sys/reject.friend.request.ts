@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Notification } from '../../entities/notifications.js';
 import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
 import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
-import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
+import { SocketNotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 import { IUserRepository } from '../../interfaces/IUserRepository.js';
 
 export class RejectFriendRequestUseCase {
@@ -10,7 +10,7 @@ export class RejectFriendRequestUseCase {
         private userRepository: IUserRepository,
         private friendRequestRepository: IFriendRequestRepository,
         private notificationRepository: INotificationRepository,
-        private notificationController: NotificationController
+        private notificationController: SocketNotificationController
     ) { }
 
 

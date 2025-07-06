@@ -4,7 +4,7 @@ import { IUserRepository } from '../../interfaces/IUserRepository.js';
 import { IFriendRequestRepository } from '../../interfaces/IFriendRequestRepository.js';
 import { IFriendshipRepository } from '../../interfaces/IFriendshipRepository.js';
 import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
-import { NotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
+import { SocketNotificationController } from '../../interface-adapters/controllers/userController/notificationController.js';
 import { Notification } from '../../entities/notifications.js';
 
 
@@ -19,7 +19,7 @@ export class SendFriendRequestUseCase {
         private friendRequestRepository: IFriendRequestRepository,
         private friendshipRepository: IFriendshipRepository,
         private notificationRepository: INotificationRepository,
-        private notificationController: NotificationController
+        private notificationController: SocketNotificationController
     ) { }
 
     async execute(senderId: string, receiverUsername: string): Promise<SendFriendRequestResponse> {

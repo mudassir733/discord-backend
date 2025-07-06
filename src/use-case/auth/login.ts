@@ -1,6 +1,6 @@
 import { IUserRepository } from "../../interfaces/IUserRepository.js";
 import { IdleScheduler } from "../../utils/idleSchedular.js";
-import { NotificationController } from "../../interface-adapters/controllers/userController/notificationController.js";
+import { SocketNotificationController } from "../../interface-adapters/controllers/userController/notificationController.js";
 import { User } from "../../entities/user.js";
 import * as bcrypt from "bcrypt";
 import { z } from "zod";
@@ -21,7 +21,7 @@ export interface LoginUserInput {
 export class LoginUser {
     constructor(
         private userRepository: IUserRepository,
-        private notificationController: NotificationController
+        private notificationController: SocketNotificationController
     ) { }
     async execute(input: LoginUserInput): Promise<{ user: User, token: string }> {
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ZodError } from "zod";
 
 import { IUserRepository } from "../../../interfaces/IUserRepository.js";
-import { NotificationController } from "../notifications/notification.controller.js";
+import { SocketNotificationController } from "../userController/notificationController.js";
 import { AuthenticatedRequest } from "../../../middleware/authMiddleware.js";
 
 // utils
@@ -26,7 +26,7 @@ export class AuthController {
     private logoutUser: LogoutUser;
 
 
-    constructor(userRepository: IUserRepository, notificationController: NotificationController,
+    constructor(userRepository: IUserRepository, notificationController: SocketNotificationController,
         idleScheduler: IdleScheduler) {
         this.registerUser = new RegisterUser(userRepository);
         this.loginUser = new LoginUser(userRepository, notificationController);

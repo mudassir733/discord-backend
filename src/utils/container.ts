@@ -10,35 +10,34 @@ import { NotificationRepository } from "../interface-adapters/repositories/notif
 
 
 // 4. Use Cases
-import { SendFriendRequestUseCase } from '../use-case/user/SendFriendRequest.js';
-import { AcceptFriendRequestUseCase } from '../use-case/user/acceptFriendRequest.js';
-import { RejectFriendRequestUseCase } from "../use-case/user/rejectFriendRequest.js";
-import { GetFriendsUseCase } from '../use-case/user/getFriends.js';
+import { SendFriendRequestUseCase } from '../use-case/friend-sys/send.friend.request.js';
+import { AcceptFriendRequestUseCase } from '../use-case/friend-sys/accept.friend.request.js';
+import { RejectFriendRequestUseCase } from "../use-case/friend-sys/reject.friend.request.js";
+import { GetIncomingFriendRequests } from "../use-case/friend-sys/get.incomming.friend.request.js";
+import { GetFriendsUseCase } from '../use-case/friend-sys/get.friends.js';
 import { SearchUsersUseCase } from '../use-case/user/searchUsers.js';
-import { CreateChannel } from "../use-case/createChannel.js";
-import { GetSentFriendRequestsUseCase } from "../use-case/user/getSendFriendRequest.js";
+import { CreateChannel } from "../use-case/channels/createChannel.js";
+import { GetSentFriendRequestsUseCase } from "../use-case/friend-sys/get.send.request.js";
 
 
 
 
 // 5. Controllers
-import { UserController } from "../interface-adapters/controllers/userController/userController.js";
-import { ResetPasswordController } from "../interface-adapters/controllers/userController/resetPasswordController.js";
-import { FriendController } from '../interface-adapters/controllers/userController/friendController.js';
+import { UserController } from "../interface-adapters/controllers/user/user.controller.js";
+import { ResetPasswordController } from "../interface-adapters/controllers/auth/reset.password.controller.js";
+import { FriendController } from '../interface-adapters/controllers/friend-sys/friend.controller.js';
 import { ChannelController } from "../interface-adapters/controllers/channelController.js";
-import { NotificationController } from "../interface-adapters/controllers/userController/notificationController.js";
-import { FriendRequestController } from "../interface-adapters/controllers/userController/friendRequestcontroller.js";
-import { NotificationRestController } from "../interface-adapters/controllers/userController/notificationResetController.js";
+import { SocketNotificationController } from "../interface-adapters/controllers/userController/notificationController.js";
+import { NotificationController } from "../interface-adapters/controllers/notifications/notification.controller.js";
 
 
 
 // 6. Routes
-import { UserRoute } from "../interface-adapters/routes/userRoute.js";
-import { ResetPasswordRoutes } from "../interface-adapters/routes/resetPasswordRoute.js";
-import { FriendRoutes } from '../interface-adapters/routes/friendRoute.js';
-import { ChannelRoutes } from "../interface-adapters/routes/channelRoute.js";
-import { FriendRequestRoutes } from "../interface-adapters/routes/friendRequestRoute.js";
-import { NotificationRoutes } from "../interface-adapters/routes/notificationRoute.js";
+import { UserRoute } from "../interface-adapters/routes/user/user.route.js";
+import { ResetPasswordRoutes } from "../interface-adapters/routes/auth/reset.password.route.js";
+import { FriendRoutes } from '../interface-adapters/routes/friend-sys/friend.route.js';
+import { ChannelRoutes } from "../interface-adapters/routes/channel/channelRoute.js";
+import { NotificationRoutes } from "../interface-adapters/routes/notifications/notification.route.js";
 
 
 
@@ -62,6 +61,7 @@ export class Container {
     private sendFriendRequestUseCase: SendFriendRequestUseCase;
     private acceptFriendRequestUseCase: AcceptFriendRequestUseCase;
     private rejectFriendRequestUseCase: RejectFriendRequestUseCase;
+    private getIncomingFriendRequests: GetIncomingFriendRequests;
     private getFriendsUseCase: GetFriendsUseCase;
     private searchUsersUseCase: SearchUsersUseCase;
     private createChannelUseCase: CreateChannel;
@@ -73,9 +73,8 @@ export class Container {
     private resetPasswordController: ResetPasswordController;
     private friendController: FriendController;
     private channelController: ChannelController;
+    private socketNotificationController: SocketNotificationController;
     private notificationController: NotificationController;
-    private friendRequestController: FriendRequestController;
-    private notificationRestController: NotificationRestController;
 
 
     // Routes
@@ -83,7 +82,6 @@ export class Container {
     private resetPasswordRoutes: ResetPasswordRoutes;
     private friendRoutes: FriendRoutes;
     private channelRoutes: ChannelRoutes;
-    private friendRequestRoutes: FriendRequestRoutes;
     private notificationRoutes: NotificationRoutes;
 
     // utils
@@ -117,13 +115,13 @@ export class Container {
 
 
         // Notification Controller
-        this.notificationController = new NotificationController(
+        this.socketNotificationController = new SocketNotificationController(
             io,
             this.friendshipRepository,
             this.userRepository,
             this.idleScheduler
         );
-        this.idleScheduler.setNotificationController(this.notificationController);
+        this.idleScheduler.setNotificationController(this.socketNotificationController);
 
         // Use Cases
         this.sendFriendRequestUseCase = new SendFriendRequestUseCase(
@@ -131,21 +129,24 @@ export class Container {
             this.friendRequestRepository,
             this.friendshipRepository,
             this.notificationRepository,
-            this.notificationController
+            this.socketNotificationController
         );
         this.acceptFriendRequestUseCase = new AcceptFriendRequestUseCase(
             this.userRepository,
             this.friendRequestRepository,
             this.friendshipRepository,
             this.notificationRepository,
-            this.notificationController
+            this.socketNotificationController
         );
         this.rejectFriendRequestUseCase = new RejectFriendRequestUseCase(
             this.userRepository,
             this.friendRequestRepository,
             this.notificationRepository,
-            this.notificationController
+            this.socketNotificationController
         );
+        this.getIncomingFriendRequests = new GetIncomingFriendRequests(this.userRepository);
+
+
         this.getFriendsUseCase = new GetFriendsUseCase(this.friendshipRepository, this.userRepository);
         this.getSentFriendRequestsUseCase = new GetSentFriendRequestsUseCase(this.friendRequestRepository);
         this.searchUsersUseCase = new SearchUsersUseCase(this.userRepository);
@@ -153,7 +154,7 @@ export class Container {
 
 
 
-        this.userController = new UserController(this.userRepository, this.notificationController, this.idleScheduler);
+        this.userController = new UserController(this.userRepository, this.socketNotificationController, this.idleScheduler);
         this.resetPasswordController = new ResetPasswordController(this.userRepository);
         this.friendController = new FriendController(
             this.sendFriendRequestUseCase,
@@ -161,11 +162,11 @@ export class Container {
             this.rejectFriendRequestUseCase,
             this.getFriendsUseCase,
             this.searchUsersUseCase,
-            this.getSentFriendRequestsUseCase
+            this.getSentFriendRequestsUseCase,
+            this.getIncomingFriendRequests
         );
-        this.friendRequestController = new FriendRequestController(this.userRepository);
         this.channelController = new ChannelController(this.createChannelUseCase);
-        this.notificationRestController = new NotificationRestController(this.notificationRepository);
+        this.notificationController = new NotificationController(this.notificationRepository);
 
 
 
@@ -173,9 +174,8 @@ export class Container {
         this.userRoute = new UserRoute(this.userController);
         this.resetPasswordRoutes = new ResetPasswordRoutes(this.resetPasswordController);
         this.friendRoutes = new FriendRoutes(this.friendController);
-        this.friendRequestRoutes = new FriendRequestRoutes(this.friendRequestController);
         this.channelRoutes = new ChannelRoutes(this.channelController);
-        this.notificationRoutes = new NotificationRoutes(this.notificationRestController);
+        this.notificationRoutes = new NotificationRoutes(this.notificationController);
 
     }
 
@@ -191,10 +191,6 @@ export class Container {
 
     getFriendRoutes(): FriendRoutes {
         return this.friendRoutes;
-    }
-
-    getFriendRequestRoutes(): FriendRequestRoutes {
-        return this.friendRequestRoutes;
     }
 
     getChannelRoutes(): ChannelRoutes {
