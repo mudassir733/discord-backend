@@ -10,6 +10,7 @@ import { AcceptFriendRequestUseCase } from '../../../use-case/friend-sys/accept.
 import { GetFriendsUseCase } from '../../../use-case/friend-sys/get.friends.js';
 import { RejectFriendRequestUseCase } from '../../../use-case/friend-sys/reject.friend.request.js';
 import { GetSentFriendRequestsInputUseCase, GetSentFriendRequestsUseCase } from '../../../use-case/friend-sys/get.send.request.js';
+import { GetIncomingFriendRequests, GetIncomingFriendRequestsInput } from '../../../use-case/friend-sys/get.incomming.friend.request.js';
 
 
 export class FriendController {
@@ -19,7 +20,8 @@ export class FriendController {
         private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
         private getFriendsUseCase: GetFriendsUseCase,
         private searchUsersUseCase: SearchUsersUseCase,
-        private getSentFriendRequestsUseCase: GetSentFriendRequestsUseCase
+        private getSentFriendRequestsUseCase: GetSentFriendRequestsUseCase,
+        private getIncommingFriendRequest: GetIncomingFriendRequests
     ) { }
 
 
@@ -99,5 +101,18 @@ export class FriendController {
         }
     }
 
+
+
+    async getIncomingFriendRequests(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const userId = req.user?.id;
+            if (!userId) throw new Error('User ID not found in token');
+            const input: GetIncomingFriendRequestsInput = { userId };
+            const friendRequests = await this.getIncommingFriendRequest.execute(input);
+            res.status(200).json(friendRequests);
+        } catch (error: any) {
+            res.status(400).json({ error: error.message });
+        }
+    }
 
 }

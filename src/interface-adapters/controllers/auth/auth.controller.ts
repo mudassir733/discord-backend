@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ZodError } from "zod";
 
 import { IUserRepository } from "../../../interfaces/IUserRepository.js";
-import { NotificationController } from "../userController/notificationController.js";
+import { NotificationController } from "../notifications/notification.controller.js";
 import { AuthenticatedRequest } from "../../../middleware/authMiddleware.js";
 
 // utils

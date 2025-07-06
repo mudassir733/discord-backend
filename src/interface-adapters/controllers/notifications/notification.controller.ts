@@ -1,10 +1,15 @@
 import { Response, Request } from 'express';
-import { MarkNotificationAsRead, MarkNotificationAsReadInput } from '../../../use-case/user/markNotificationAsRead.js';
+
 import { INotificationRepository } from '../../../interfaces/INotificationRepository.js';
 import { AuthenticatedRequest } from '../../../middleware/authMiddleware.js';
-import { GetNotificationsUseCase } from '../../../use-case/user/getNotifications.js';
 
-export class NotificationRestController {
+
+// use-cases
+import { GetNotificationsUseCase } from '../../../use-case/notifications/friend-sys-notification/get.notification.js';
+import { MarkNotificationAsRead, MarkNotificationAsReadInput } from '../../../use-case/notifications/friend-sys-notification/mark.notification.as.read.js';
+
+
+export class NotificationController {
     private markNotificationAsRead: MarkNotificationAsRead;
     private getNotificationsUseCase: GetNotificationsUseCase;
 
