@@ -1,12 +1,12 @@
 import schedule, { Job } from 'node-schedule';
-import { NotificationController } from '../interface-adapters/controllers/userController/notificationController.js';
+import { SocketNotificationController } from '../interface-adapters/controllers/userController/notificationController.js';
 
 export class IdleScheduler {
     private idleJobs: Map<string, Job> = new Map();
 
 
 
-    constructor(private idleCallback: (userId: string) => Promise<void>, private notificationController: NotificationController) { }
+    constructor(private idleCallback: (userId: string) => Promise<void>, private socketNotificationController: SocketNotificationController) { }
 
     schedule(userId: string, delayMinutes: number = 10): void {
         // Cancel existing job if any
@@ -16,7 +16,7 @@ export class IdleScheduler {
 
         const job = schedule.scheduleJob(runAt, async () => {
             await this.idleCallback(userId);
-            await this.notificationController.broadcastStatusUpdate(userId, 'idle');
+            await this.socketNotificationController.broadcastStatusUpdate(userId, 'idle');
             this.idleJobs.delete(userId);
         });
 
@@ -36,7 +36,7 @@ export class IdleScheduler {
         this.idleJobs.clear();
     }
 
-    setNotificationController(controller: NotificationController): void {
-        this.notificationController = controller;
+    setNotificationController(controller: SocketNotificationController): void {
+        this.socketNotificationController = controller;
     }
 }

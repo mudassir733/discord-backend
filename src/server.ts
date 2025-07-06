@@ -40,7 +40,6 @@ app.use("/users", container.getUserRoutes().getRouter());
 app.use("/password", container.getResetPasswordRoutes().getRouter());
 app.use("/api", container.getFriendRoutes().getRouter());
 app.use('/api/notifications', container.getNotificationRoutes().getRouter());
-app.use('/api/friend-requests', container.getFriendRequestRoutes().getRouter());
 app.use("/api", container.getChannelRoutes().getRouter());
 
 

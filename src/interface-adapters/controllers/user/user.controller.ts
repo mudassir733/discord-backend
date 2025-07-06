@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { IUserRepository } from "../../../interfaces/IUserRepository.js";
-import { AuthenticatedRequest } from "../../../middleware/authMiddleware.js";
 
 
 
@@ -8,11 +7,6 @@ import { AuthenticatedRequest } from "../../../middleware/authMiddleware.js";
 import { GetAllUsersUseCase } from "../../../use-case/user/getAllUser.js";
 import { GetUserById } from "../../../use-case/user/getUserById.js";
 
-export interface UserController {
-    register(req: Request, res: Response): Promise<void>;
-    logout(req: AuthenticatedRequest, res: Response): Promise<void>;
-    login(req: Request, res: Response): Promise<void>;
-}
 
 export class UserController {
     private getUsersById: GetUserById;

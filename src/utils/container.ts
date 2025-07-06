@@ -154,7 +154,7 @@ export class Container {
 
 
 
-        this.userController = new UserController(this.userRepository, this.socketNotificationController, this.idleScheduler);
+        this.userController = new UserController(this.userRepository);
         this.resetPasswordController = new ResetPasswordController(this.userRepository);
         this.friendController = new FriendController(
             this.sendFriendRequestUseCase,
