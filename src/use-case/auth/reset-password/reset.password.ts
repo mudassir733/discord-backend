@@ -1,5 +1,5 @@
-import { IUserRepository } from '../../interfaces/IUserRepository.js';
-import { prisma } from "../../config/database.js"
+import { IUserRepository } from '../../../interfaces/IUserRepository.js';
+import { prisma } from "../../../config/database.js"
 import * as bcrypt from 'bcrypt';
 import { z } from 'zod';
 
