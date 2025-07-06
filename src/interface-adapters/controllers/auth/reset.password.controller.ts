@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
-import { InitiatePasswordResetForLoggedInUser } from '../../../use-case/user/initiatePasswordResetForLoggedInUser.js';
-import { VerifyResetToken, VerifyResetTokenInput } from '../../../use-case/user/verifyToken.js';
-import { ResetPassword, ResetPasswordInput } from '../../../use-case/user/resetPassword.js';
-import { IUserRepository } from '../../../interfaces/IUserRepository.js';
 import { ZodError } from 'zod';
+
+import { IUserRepository } from '../../../interfaces/IUserRepository.js';
+
+// use-cases
+import { InitiatePasswordResetForLoggedInUser } from '../../../use-case/auth/reset-password/initial.password.js';
+import { VerifyResetToken, VerifyResetTokenInput } from '../../../use-case/auth/reset-password/verify.token.js';
+import { ResetPassword, ResetPasswordInput } from '../../../use-case/auth/reset-password/reset.password.js';
 
 export class ResetPasswordController {
     private initiateReset: InitiatePasswordResetForLoggedInUser;
