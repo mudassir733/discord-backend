@@ -1,4 +1,4 @@
-import { DiscordRepository } from "../interface-adapters/repositories/disordRepository.js";
+import { DiscordRepository } from "../../interface-adapters/repositories/disordRepository.js";
 
 
 export class CreateChannel {

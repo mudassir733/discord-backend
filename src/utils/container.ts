@@ -10,13 +10,13 @@ import { NotificationRepository } from "../interface-adapters/repositories/notif
 
 
 // 4. Use Cases
-import { SendFriendRequestUseCase } from '../use-case/userUseCase/SendFriendRequest.js';
-import { AcceptFriendRequestUseCase } from '../use-case/userUseCase/acceptFriendRequest.js';
-import { RejectFriendRequestUseCase } from "../use-case/userUseCase/rejectFriendRequest.js";
-import { GetFriendsUseCase } from '../use-case/userUseCase/getFriends.js';
-import { SearchUsersUseCase } from '../use-case/userUseCase/searchUsers.js';
+import { SendFriendRequestUseCase } from '../use-case/user/SendFriendRequest.js';
+import { AcceptFriendRequestUseCase } from '../use-case/user/acceptFriendRequest.js';
+import { RejectFriendRequestUseCase } from "../use-case/user/rejectFriendRequest.js";
+import { GetFriendsUseCase } from '../use-case/user/getFriends.js';
+import { SearchUsersUseCase } from '../use-case/user/searchUsers.js';
 import { CreateChannel } from "../use-case/createChannel.js";
-import { GetSentFriendRequestsUseCase } from "../use-case/userUseCase/getSendFriendRequest.js";
+import { GetSentFriendRequestsUseCase } from "../use-case/user/getSendFriendRequest.js";
 
 
 

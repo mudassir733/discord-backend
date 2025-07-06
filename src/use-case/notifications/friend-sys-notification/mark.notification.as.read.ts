@@ -1,5 +1,5 @@
-import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
-import { Notification } from '../../entities/notifications.js';
+import { INotificationRepository } from '../../../interfaces/INotificationRepository.js';
+import { Notification } from '../../../entities/notifications.js';
 
 export interface MarkNotificationAsReadInput {
     notificationId: string;

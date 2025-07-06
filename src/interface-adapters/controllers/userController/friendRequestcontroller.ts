@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { GetIncomingFriendRequests, GetIncomingFriendRequestsInput } from '../../../use-case/userUseCase/getIncommingFriendRequest.js';
+import { GetIncomingFriendRequests, GetIncomingFriendRequestsInput } from '../../../use-case/user/getIncommingFriendRequest.js';
 import { IUserRepository } from '../../../interfaces/IUserRepository.js';
 import { AuthenticatedRequest } from '../../../middleware/authMiddleware.js';
 

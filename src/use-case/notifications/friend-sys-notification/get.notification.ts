@@ -1,5 +1,5 @@
-import { INotificationRepository } from '../../interfaces/INotificationRepository.js';
-import { Notification } from '../../entities/notifications.js';
+import { INotificationRepository } from '../../../interfaces/INotificationRepository.js';
+import { Notification } from '../../../entities/notifications.js';
 
 export interface GetNotificationsRequest {
     userId: string;
@@ -14,7 +14,5 @@ export class GetNotificationsUseCase {
         const { userId, type, read } = request;
         return await this.notificationRepository.findByUserId(userId, { type, read });
     }
-
-
 
 }

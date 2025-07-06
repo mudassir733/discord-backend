@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { SendFriendRequestUseCase } from '../../../use-case/userUseCase/SendFriendRequest.js';
-import { AcceptFriendRequestUseCase } from '../../../use-case/userUseCase/acceptFriendRequest.js';
-import { GetFriendsUseCase } from '../../../use-case/userUseCase/getFriends.js';
-import { RejectFriendRequestUseCase } from '../../../use-case/userUseCase/rejectFriendRequest.js';
-import { SearchUsersUseCase } from '../../../use-case/userUseCase/searchUsers.js';
-import { GetSentFriendRequestsInputUseCase, GetSentFriendRequestsUseCase } from '../../../use-case/userUseCase/getSendFriendRequest.js';
+import { SendFriendRequestUseCase } from '../../../use-case/user/SendFriendRequest.js';
+import { AcceptFriendRequestUseCase } from '../../../use-case/user/acceptFriendRequest.js';
+import { GetFriendsUseCase } from '../../../use-case/user/getFriends.js';
+import { RejectFriendRequestUseCase } from '../../../use-case/user/rejectFriendRequest.js';
+import { SearchUsersUseCase } from '../../../use-case/user/searchUsers.js';
+import { GetSentFriendRequestsInputUseCase, GetSentFriendRequestsUseCase } from '../../../use-case/user/getSendFriendRequest.js';
 import { AuthenticatedRequest } from '../../../middleware/authMiddleware.js';
 
 

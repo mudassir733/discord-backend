@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { InitiatePasswordResetForLoggedInUser } from '../../../use-case/userUseCase/initiatePasswordResetForLoggedInUser.js';
-import { VerifyResetToken, VerifyResetTokenInput } from '../../../use-case/userUseCase/verifyToken.js';
-import { ResetPassword, ResetPasswordInput } from '../../../use-case/userUseCase/resetPassword.js';
+import { InitiatePasswordResetForLoggedInUser } from '../../../use-case/user/initiatePasswordResetForLoggedInUser.js';
+import { VerifyResetToken, VerifyResetTokenInput } from '../../../use-case/user/verifyToken.js';
+import { ResetPassword, ResetPasswordInput } from '../../../use-case/user/resetPassword.js';
 import { IUserRepository } from '../../../interfaces/IUserRepository.js';
 import { ZodError } from 'zod';
 
