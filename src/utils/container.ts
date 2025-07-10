@@ -23,6 +23,7 @@ import { GetSentFriendRequestsUseCase } from "../use-case/friend-sys/get.send.re
 
 
 // 5. Controllers
+import { AuthController } from "../interface-adapters/controllers/auth/auth.controller.js";
 import { UserController } from "../interface-adapters/controllers/user/user.controller.js";
 import { ResetPasswordController } from "../interface-adapters/controllers/auth/reset.password.controller.js";
 import { FriendController } from '../interface-adapters/controllers/friend-sys/friend.controller.js';
@@ -33,6 +34,7 @@ import { NotificationController } from "../interface-adapters/controllers/notifi
 
 
 // 6. Routes
+import { AuthRoutes } from "../interface-adapters/routes/auth/auth.route.js";
 import { UserRoute } from "../interface-adapters/routes/user/user.route.js";
 import { ResetPasswordRoutes } from "../interface-adapters/routes/auth/reset.password.route.js";
 import { FriendRoutes } from '../interface-adapters/routes/friend-sys/friend.route.js';
@@ -69,6 +71,7 @@ export class Container {
 
 
     // Controllers
+    private authController: AuthController;
     private userController: UserController;
     private resetPasswordController: ResetPasswordController;
     private friendController: FriendController;
@@ -78,6 +81,7 @@ export class Container {
 
 
     // Routes
+    private authRoutes: AuthRoutes;
     private userRoute: UserRoute;
     private resetPasswordRoutes: ResetPasswordRoutes;
     private friendRoutes: FriendRoutes;
@@ -153,7 +157,11 @@ export class Container {
         this.createChannelUseCase = new CreateChannel(this.discordRepository);
 
 
-
+        this.authController = new AuthController(
+            this.userRepository,
+            this.socketNotificationController,
+            this.idleScheduler
+        );
         this.userController = new UserController(this.userRepository);
         this.resetPasswordController = new ResetPasswordController(this.userRepository);
         this.friendController = new FriendController(
@@ -171,6 +179,7 @@ export class Container {
 
 
         // Routes
+        this.authRoutes = new AuthRoutes(this.authController);
         this.userRoute = new UserRoute(this.userController);
         this.resetPasswordRoutes = new ResetPasswordRoutes(this.resetPasswordController);
         this.friendRoutes = new FriendRoutes(this.friendController);
@@ -180,6 +189,9 @@ export class Container {
     }
 
 
+    getAuthRoutes(): AuthRoutes {
+        return this.authRoutes;
+    }
 
     getUserRoutes(): UserRoute {
         return this.userRoute;

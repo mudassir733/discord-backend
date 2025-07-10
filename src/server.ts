@@ -36,6 +36,7 @@ app.use(express.json());
 const container = new Container(io);
 
 // 6. Register Endpoints
+app.use("/auth", container.getAuthRoutes().getRouter());
 app.use("/users", container.getUserRoutes().getRouter());
 app.use("/password", container.getResetPasswordRoutes().getRouter());
 app.use("/api", container.getFriendRoutes().getRouter());

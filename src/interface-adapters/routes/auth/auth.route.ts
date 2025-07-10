@@ -3,7 +3,7 @@ import { UserController } from "../../controllers/auth/auth.controller.js";
 import { authMiddleware } from "../../../middleware/authMiddleware.js";
 
 
-export class UserRoute {
+export class AuthRoutes {
     private router: Router = express.Router();
     private controller: UserController;
 
