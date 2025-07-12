@@ -36,13 +36,13 @@ app.use(express.json());
 const container = new Container(io);
 
 // 6. Register Endpoints
+app.use("/auth", container.getAuthRoutes().getRouter());
 app.use("/users", container.getUserRoutes().getRouter());
 app.use("/password", container.getResetPasswordRoutes().getRouter());
 app.use("/api", container.getFriendRoutes().getRouter());
 app.use('/api/notifications', container.getNotificationRoutes().getRouter());
-app.use('/api/friend-requests', container.getFriendRequestRoutes().getRouter());
 app.use("/api", container.getChannelRoutes().getRouter());
-app.use("/api/chat", container.getChatRoutes().getRouter())
+
 
 // start server 
 async function startServer() {

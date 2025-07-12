@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateChannel } from '../../use-case/createChannel.js';
+import { CreateChannel } from '../../use-case/channels/createChannel.js';
 
 export class ChannelController {
     constructor(private createChannelUseCase: CreateChannel) { }

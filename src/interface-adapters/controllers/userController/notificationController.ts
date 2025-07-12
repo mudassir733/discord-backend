@@ -5,7 +5,7 @@ import { IUserRepository } from "../../../interfaces/IUserRepository.js";
 import { IdleScheduler } from "../../../utils/idleSchedular.js";
 
 
-export class NotificationController {
+export class SocketNotificationController {
     private io: Server;
     private userSockets: Map<string, Socket> = new Map();
     private friendshipRepository: IFriendshipRepository;
