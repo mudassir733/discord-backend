@@ -3,8 +3,6 @@ import { User } from "../../entities/user.js";
 import { prisma } from "../../config/database.js";
 
 
-
-
 export class UserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
         const createdUser = await prisma.user.create({
@@ -18,7 +16,7 @@ export class UserRepository implements IUserRepository {
                 dateOfBirth: user.getDateOfBirth(),
                 status: user.getStatus(),
             }
-        })
+        });
         const newUser = new User(
             createdUser.id,
             createdUser.email,
