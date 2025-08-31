@@ -1,6 +1,7 @@
 // 1. Core Modules
 import express from "express";
 import { createServer } from "http";
+import { SocketIOService } from "./config/socket.js";
 import { Server } from "socket.io";
 
 // 2. Configuration / Database
@@ -18,7 +19,10 @@ import cors from "cors";
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 const app = express();
-const httpServer = createServer(app)
+const httpServer = createServer(app);
+const socketService = new SocketIOService(httpServer);
+socketService.start();
+
 const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:3000",

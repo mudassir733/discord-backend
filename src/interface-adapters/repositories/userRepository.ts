@@ -16,7 +16,7 @@ export class UserRepository implements IUserRepository {
                 dateOfBirth: user.getDateOfBirth(),
                 status: user.getStatus(),
             }
-        })
+        });
         const newUser = new User(
             createdUser.id,
             createdUser.email,

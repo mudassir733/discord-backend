@@ -10,7 +10,6 @@ export class DiscordRepository {
         });
     }
 
-
     async login(token: string): Promise<void> {
         await this.client.login(token)
     }
