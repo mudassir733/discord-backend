@@ -25,13 +25,13 @@ socketService.start();
 
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ["https://discord-frontend-p2zz.vercel.app", "http://localhost:3000"],
     }
 })
 
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["https://discord-frontend-p2zz.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
 }));

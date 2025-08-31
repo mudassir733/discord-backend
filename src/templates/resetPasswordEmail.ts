@@ -1,7 +1,7 @@
 
 
-export function getResetPasswordEmailTemplate(resetLink: string, websiteLink: string = 'http://localhost:3000'): string {
-    return `
+export function getResetPasswordEmailTemplate(resetLink: string, websiteLink: string = 'https://discord-frontend-p2zz.vercel.app'): string {
+  return `
       <!DOCTYPE html>
   <html lang="en">
   <head>
